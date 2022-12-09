@@ -59,7 +59,6 @@ class Config():
     input_fps: int
     input_exposure: int
 
-    streamer_fps: int
     streamer_res: Tuple[int, int]
     streaner_path: str
 

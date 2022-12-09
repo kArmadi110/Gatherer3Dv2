@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from config_constants import *
 import config_types as g3d_cfg
 import numpy as np

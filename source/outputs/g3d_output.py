@@ -1,9 +1,11 @@
 import numpy as np
 
+from config_types import Config
+
 
 class G3DOutput():
-    def __init__(self, output_name: str, ):
-        self._output_name = output_name
+    def __init__(self, cfg: Config):
+        self._cfg = cfg
 
     def deinit(self):
         raise NotImplementedError
