@@ -1,24 +1,36 @@
-from inputs.g3d_input import G3DInput
+from os import listdir
+from os.path import isfile, join
+
 import numpy as np
 import cv2
 
+from config_types import Config
+
+from inputs.g3d_input import G3DInput
+
 
 class G3DImagesIn(G3DInput):
-    def __init__(self, input_name: str):
-        G3DInput.__init__(input_name)
-        self.counter = 0
+    def __init__(self, cfg: Config):
+        G3DInput.__init__(cfg)
+
+        self._frame_list = [f for f in listdir(self._cfg.input_folder)
+                            if f.contains(self._cfg.input_name) and
+                            isfile(join(self._cfg.input_folder, f))]
+        self._frame_id = 0
+        self._stream_state = True
 
     def read(self) -> np.array:
-        image = cv2.imread(self.input_name.format(self.counter))
-        self.counter = self.counter + 1
+        frame = cv2.imread(self._frame_list[self._frame_id])
 
-        if not result:
-            raise Exception("Empty frame")
+        self._frame_id += 1
 
-        return image
+        if frame is None:
+            self._stream_state = False
+
+        return frame
 
     def deinit(self):
         pass
 
     def isOpen(self) -> bool:
-        raise NotImplementedError
+        return self._stream_state

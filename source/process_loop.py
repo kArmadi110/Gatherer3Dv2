@@ -1,9 +1,10 @@
 import signal
-from time import sleep
+from inputs import G3DInput
+from outputs import G3DOutput
 
 
 class ProcessLoop():
-    def __init__(self, input_stream, output_streams):
+    def __init__(self, input_stream: G3DInput, output_streams: G3DOutput):
         if not input_stream or not output_streams:
             raise RuntimeError("input or output stream is empty")
 
@@ -11,7 +12,9 @@ class ProcessLoop():
 
         self._input_stream = input_stream
         self._output_streams = output_streams
+
         self._threadCtrl = self._input_stream.isOpen()
+        self._counter = 0
 
     def sigint_handler(self, sig, frame):
         self._threadCtrl = False
@@ -26,12 +29,8 @@ class ProcessLoop():
         frame = self._input_stream.read()
 
         while (self._threadCtrl and self._input_stream.isOpen()):
-            # try:
             for i in self._output_streams:
                 i.process_frame(frame)
             frame = self._input_stream.read()
-            # except:
-            #     print("End of calculation.")
-            #     self._threadCtrl = False
 
         self.deinit()

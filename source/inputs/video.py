@@ -1,21 +1,25 @@
-from inputs.g3d_input import G3DInput
 import numpy as np
 import cv2
 
+from config_types import Config
+
+from inputs.g3d_input import G3DInput
+
 
 class G3DVideoIn(G3DInput):
-    def __init__(self, input_name: str):
-        G3DInput.__init__(self, input_name)
-        print(self._input_name)
-        self.cap = cv2.VideoCapture(self._input_name)
-        self.lastFrameState = True
+    def __init__(self, cfg: Config):
+        G3DInput.__init__(self, cfg)
+
+        self._cap = cv2.VideoCapture(self._cfg.input_folder+self._cfg.input_name)
+        self._stream_state = True
 
     def read(self) -> np.array:
-        self.lastFrameState, frame = self.cap.read()
+        self._stream_state, frame = self._cap.read()
+
         return frame
 
     def deinit(self):
-        self.cap.release()
+        self._cap.release()
 
     def isOpen(self) -> bool:
-        return self.cap.isOpened() and self.lastFrameState
+        return self._cap.isOpened() and self._stream_state

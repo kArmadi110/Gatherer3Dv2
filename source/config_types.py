@@ -20,12 +20,18 @@ class OutputMode(Enum):
     IMAGES = 5
 
 
-class CalibrationType(Enum):
+class CalibMode(Enum):
     CAMERA = 0
     LASER = 1
     EXPOSURE = 2
     FULL = 3
     IMPORT = 4
+
+
+class SegmentationMode(Enum):
+    MIDLE = 0
+    INTENSITY = 1
+    SUBPIXEL = 2
 
 
 @dataclass
@@ -38,127 +44,26 @@ class BoardDescriptor():
     markerSize: int = 0.01
 
 
-# @dataclass
-# class Config():
-#     input_mode: InputMode = InputMode.VIDEO
-#     output_mode: List = field(default_factory=lambda: [OutputMode.IMAGES, OutputMode.STREAM])
-#     calib_mode: CalibrationType = CalibrationType.FULL
-
-#     input_folder: str = "./02_out/"
-#     output_path: str = "./02_out/temp/"
-#     output_file: str = "out_{}.png"
-#     input_name: str = "out_.mp4"
-#     calib_folder: str = "./02_out/calib/"
-
-#     resolution: Tuple[int, int] = (1632, 1232)
-#     input_fps: int = 30
-#     input_exposure: int = 100
-#     certanty: int = 0.8
-
-#     streamer_fps: int = 30
-#     streamer_res: Tuple[int, int] = (640, 480)
-#     streaner_path: str = "rtsp://localhost:8554/G3D"
-
-#     laser_gpio: int = 14
-
-# @dataclass
-# class Config():
-#     input_mode: InputMode = InputMode.VIDEO
-#     output_mode: List = field(default_factory=lambda: [OutputMode.MESH])
-#     # input_mode: InputMode = InputMode.CAMERA
-#     # output_mode: List = field(default_factory=lambda: [OutputMode.VIDEO])
-
-#     calib_mode: CalibrationType = CalibrationType.IMPORT
-
-#     input_folder: str = "./02_out/"
-#     output_path: str = "./02_out/"
-#     output_file: str = "08_YODA"
-#     input_name: str = "08_YODA.mp4"
-
-#     minimal_campos_precision: float = 0.1
-
-#     # input_name: str = "01_RUBIC5.mp4"
-#     # input_name: str = "01_RUBICX.mp4"
-#     # input_name: str = "02_benchy.mp4"
-#     # input_name: str = "03_penguin.mp4"
-#     # input_name: str = "04_yoda.mp4"
-#     # input_name: str = "04_yoda2.mp4"
-#     # input_name: str = "05_key.mp4"
-#     # input_name: str = "0"
-
-#     # output_file: str = "calibration2"
-#     # input_name: str = "calibration.mp4"
-
-#     resolution: Tuple[int, int] = (1632, 1232)
-#     input_fps: int = 15
-#     input_exposure: int = 100
-#     certanty: int = 0.8
-
-#     streamer_fps: int = 8
-#     streamer_res: Tuple[int, int] = (640, 480)
-#     streaner_path: str = "rtsp://localhost:8554/G3D"
-
-#     laser_gpio: int = 14
-#     calib_board: BoardDescriptor = BoardDescriptor()
-
-#     export_cage: bool = True
-
-
 @dataclass
 class Config():
-    input_mode: InputMode = InputMode.CAMERA
-    output_mode: List = field(default_factory=lambda: [OutputMode.IMAGES])
+    input_mode: InputMode
+    output_mode: List
+    calib_mode: CalibMode
 
-    calib_mode: CalibrationType = CalibrationType.IMPORT
+    input_folder: str
+    output_folder: str
+    output_name: str
+    input_name: str
 
-    input_folder: str = "./02_out/"
-    output_path: str = "./02_out/"
-    output_file: str = "09_temp"
-    input_name: str = "/dev/video0"
+    resolution: Tuple[int, int]
+    input_fps: int
+    input_exposure: int
 
-    # output_file: str = "calibration2"
-    # input_name: str = "calibration.mp4"
+    streamer_fps: int
+    streamer_res: Tuple[int, int]
+    streaner_path: str
 
-    # resolution: Tuple[int, int] = (1920, 1080)
-    resolution: Tuple[int, int] = (640, 480)
-    input_fps: int = 15
-    input_exposure: int = 100
-    certanty: int = 0.8
+    laser_gpio: int
 
-    streamer_fps: int = 8
-    streamer_res: Tuple[int, int] = (640, 480)
-    streaner_path: str = "rtsp://localhost:8554/G3D"
-
-    laser_gpio: int = 14
+    pos_certainty_th: int
     calib_board: BoardDescriptor = BoardDescriptor()
-
-
-# calibration
-
-# @dataclass
-# class Config():
-#     input_mode: InputMode = InputMode.VIDEO
-#     output_mode: List = field(default_factory=lambda: [OutputMode.CALIBRATION])
-
-#     calib_mode: CalibrationType = CalibrationType.LASER
-
-#     input_folder: str = "./02_out/"
-#     output_path: str = "./02_out/"
-#     # output_file: str = "RECORDING3"
-#     # input_name: str = "RECORDING2.mp4"
-#     # input_name: str = "0"
-
-#     output_file: str = "calibration3"
-#     input_name: str = "calibration.mp4"
-
-#     resolution: Tuple[int, int] = (1632, 1232)
-#     input_fps: int = 15
-#     input_exposure: int = 100
-#     certanty: int = 0.8
-
-#     streamer_fps: int = 8
-#     streamer_res: Tuple[int, int] = (640, 480)
-#     streaner_path: str = "rtsp://localhost:8554/G3D"
-
-#     laser_gpio: int = 14
-#     calib_board: BoardDescriptor = BoardDescriptor()

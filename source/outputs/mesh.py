@@ -45,7 +45,7 @@ class G3dMesh(G3DCalibration):
             self.rotation_vectors.append(rvec)
             self.translation_vectors.append(tvec)
 
-            temp_2d = self.getLaserPoints(img_undist, corners)
+            temp_2d, colors = self.getLaserPoints(img_undist, corners)
             temp_3d = []
             temp = np.array([0, 0, 0, 1])
 
@@ -53,9 +53,9 @@ class G3dMesh(G3DCalibration):
             Lcam = np.vstack((Lcam, temp))
             LcamInverse = np.linalg.inv(Lcam)
 
-            for i in temp_2d:
-                vector = [[i[0][0]],
-                          [i[0][1]],
+            for i in range(len(temp_2d)):
+                vector = [[temp_2d[i][0]],
+                          [temp_2d[i][1]],
                           [1]]
 
                 norm_point = np.vstack((cam_inverse.dot(vector), [1]))
@@ -84,6 +84,7 @@ class G3dMesh(G3DCalibration):
 
                 if export:
                     self.points_3d.append([[result2[0][0]], [result2[1][0]], [result2[2][0]]])
+                    self.colors.append(colors[i])
 
     def deinit(self):
         self.exportToPCD()
@@ -92,6 +93,7 @@ class G3dMesh(G3DCalibration):
     def exportToPCD(self):
         pcd = o3d.geometry.PointCloud()
         pcd.points = o3d.utility.Vector3dVector(self.points_3d)
+        pcd.colors = o3d.utility.Vector3dVector(np.array(self.colors).astype(np.float) / 255.0)
         o3d.io.write_point_cloud(self._cfg.output_path + self._cfg.output_file + ".pcd", pcd)
 
     def exportToSTL(self):

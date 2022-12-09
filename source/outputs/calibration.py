@@ -28,6 +28,7 @@ class G3DCalibration(G3DOutput):
 
         self.selectedFrame = None
         self.laserPoints = []
+        self.colors = []
 
         self.cameraMatrixInit = np.array([[1000.,       0., self._cfg.resolution[0]/2.],
                                           [0.,       1000., self._cfg.resolution[1]/2.],
@@ -162,24 +163,6 @@ class G3DCalibration(G3DOutput):
 
         cv2.imwrite("chessBoard.png", result)
 
-    def segmentLaser(self, frame):
-        rows, cols, _ = frame.shape
-
-        img = cv2.subtract(frame[:, :, 2], frame[:, :, 1])
-        img = cv2.GaussianBlur(img, (11, 1), 0, 0)
-        _, thrs = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-
-        final = np.zeros((rows, cols, 1), dtype=np.uint8)
-        temp = 0
-        nz = np.nonzero(thrs)
-
-        for i in range(len(nz[0])):
-            if nz[0][temp] != nz[0][i]:
-                final[nz[0][temp]][round(nz[1][temp]+(nz[1][i-1]-nz[1][temp])/2.0)] = 255
-                temp = i
-
-        return final
-
     def _read_for_laser(self, frame):
         img_undist = cv2.undistort(frame, self.camera_matrix, self.distortion_coefficients0, None)
 
@@ -237,6 +220,95 @@ class G3DCalibration(G3DOutput):
 
         self.imsize = gray.shape
 
+    def segmentLaserMidle(self, frame):
+        img = cv2.subtract(frame[:, :, 2], frame[:, :, 1])
+        img = cv2.GaussianBlur(img, (11, 1), 0, 0)
+        _, thrs = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+        temp = 0
+        nz = np.nonzero(thrs)
+
+        colors = []
+        result = []
+
+        for i in range(len(nz[0])):
+            if nz[0][temp] != nz[0][i]:
+                x = nz[0][temp]
+                y = round(nz[1][temp]+(nz[1][i-1]-nz[1][temp])/2.0)
+
+                result.append([y, x])
+
+                if (self._cfg.color_mode):
+                    colors.append(self.determinePixelColor(frame, thrs, x, y))
+                temp = i
+
+        return result, colors
+
+    def segmentLaserIntensity(self, frame):
+        img = cv2.subtract(frame[:, :, 2], frame[:, :, 1])
+        img = cv2.GaussianBlur(img, (11, 1), 0, 0)
+        rows, cols = img.shape
+        _, thrs = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+        temp = 0
+        nz = np.nonzero(thrs)
+
+        colors = []
+        result = []
+        maxVal = 0
+        maxX = 0
+
+        for i in range(len(nz[0])):
+
+            if img[nz[0][i]][nz[1][i]] > maxVal:
+                maxVal = img[nz[0][i]][nz[1][i]]
+                maxX = i
+
+            if nz[0][temp] != nz[0][i]:
+                x = nz[0][maxX]
+                y = nz[1][maxX]
+
+                if (self._cfg.color_mode):
+                    colors.append(self.determinePixelColor(frame, thrs, x, y))
+
+                delta = (2*int(img[x][y+2])+int(img[x][y+1])-int(img[x][y-1])-2*int(img[x][y-2]))/(int(img[x][y-2])+int(img[x][y-1])+int(img[x][y])+int(img[x][y+1])+int(img[x][y+2]))
+
+                result.append([y+delta, x])
+
+                maxVal = 0
+                maxX = 0
+                temp = i
+
+        return result, colors
+
+    def segmentLaserSubpixel(self, frame):
+        pass
+
+    def determinePixelColor(self, frame, mask, x, y):
+        color1 = None
+        color2 = None
+
+        CUSTOM_CONST = 5
+
+        for i in range(self._cfg.resolution[0]-x):
+            if (mask[x-i][y] == 0):
+                if x-i-CUSTOM_CONST >= 0:
+                    color1 = frame[x-i-CUSTOM_CONST][y]
+                else:
+                    color1 = frame[x-i][y]
+                break
+
+        for i in range(self._cfg.resolution[0]-x):
+            if (mask[x+i][y] == 0):
+                if x+i+CUSTOM_CONST >= 0:
+                    color2 = frame[x+i+CUSTOM_CONST][y]
+                else:
+                    color2 = frame[x+i][y]
+                break
+        colorResult = (color2+color1)/2.0
+
+        return colorResult
+
     def getLaserPoints(self, frame, pointsForMask):
         cv2.imwrite(f"./02_out/temp/original/{self.counter}.png", frame)
         x_array = [i[0][0][0] for i in pointsForMask]
@@ -255,13 +327,19 @@ class G3DCalibration(G3DOutput):
         # masked[min_y:max_y, min_x:max_x] = frame[min_y:max_y, min_x:max_x]
         # cv2.imwrite(f"./02_out/temp/masked/{self.counter}.png", masked)
 
-        laser = self.segmentLaser(frame)
-        cv2.imwrite(f"./02_out/temp/segmented/{self.counter}.png", laser)
+        result = []
+
+        if (self._cfg.segmentation_mode == SegmentationMode.MIDLE):
+            result, colors = self.segmentLaserMidle(frame)
+        elif (self._cfg.segmentation_mode == SegmentationMode.INTENSITY):
+            result, colors = self.segmentLaserIntensity(frame)
+        elif (self._cfg.segmentation_mode == SegmentationMode.SUBPIXEL):
+            result, colors = self.segmentLaserSubpixel(frame)
 
         # cv2.imwrite("./02_out/temp/laser.png", laser)
         # temp = cv2.findNonZero(laser)[0][0]
 
-        return cv2.findNonZero(laser)
+        return result, colors
 
     def calibrateCamera(self):
         """
@@ -465,7 +543,7 @@ class G3DCalibration(G3DOutput):
         Z = points[:, 2]
 
         (a, b, c), _, _, _ = np.linalg.lstsq(A, Z)
-        self.plane = [a, b, c] #TODO: export/import pickle plane
+        self.plane = [a, b, c]  # TODO: export/import pickle plane
 
     def calibrateExposure(self):
         pass
@@ -483,6 +561,7 @@ class G3DCalibration(G3DOutput):
 #
 #
 #
+
 
     def LASERSTUFF(self, mtx, dist, rvecs, tvecs):
         self.selectedFrame = cv2.imread("./out/_distorted.png")
