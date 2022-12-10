@@ -3,7 +3,7 @@ import cv2
 
 from core.config_types import Config
 
-from inputs.g3d_input import G3DInput
+from core.g3d_input import G3DInput
 
 
 class G3DVideoIn(G3DInput):

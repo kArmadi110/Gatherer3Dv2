@@ -5,6 +5,9 @@ from core.config_types import Config, InputMode, OutputMode, CalibMode
 
 class G3DConstants:
     recording_config = Config(
+        is_async_mode=True,
+        async_q_limit=5,
+
         input_mode=InputMode.CAMERA,
         output_mode=field(default_factory=lambda: [OutputMode.VIDEO, OutputMode.STREAM]),
         calib_mode=CalibMode.IMPORT,
@@ -26,6 +29,9 @@ class G3DConstants:
     )
 
     scann_config1 = Config(
+        is_async_mode=True,
+        async_q_limit=5,
+
         input_mode=InputMode.CAMERA,
         output_mode=field(default_factory=lambda: [OutputMode.MESH, OutputMode.STREAM]),
         calib_mode=CalibMode.IMPORT,
@@ -47,6 +53,9 @@ class G3DConstants:
     )
 
     calib_config1 = Config(
+        is_async_mode=True,
+        async_q_limit=5,
+
         input_mode=InputMode.CAMERA,
         output_mode=field(default_factory=lambda: [OutputMode.CALIBRATION, OutputMode.STREAM]),
         calib_mode=CalibMode.IMPORT,
@@ -68,6 +77,9 @@ class G3DConstants:
     )
 
     calib_config2 = Config(
+        is_async_mode=True,
+        async_q_limit=5,
+
         input_mode=InputMode.VIDEO,
         output_mode=field(default_factory=lambda: [OutputMode.CALIBRATION, OutputMode.STREAM]),
         calib_mode=CalibMode.IMPORT,

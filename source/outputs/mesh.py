@@ -88,7 +88,7 @@ class G3dMesh(G3DCalibration):
 
     def deinit(self):
         self.exportToPCD()
-        # self.exportToSTL()
+        self.exportToSTL()
 
     def exportToPCD(self):
         pcd = o3d.geometry.PointCloud()
@@ -109,33 +109,3 @@ class G3dMesh(G3DCalibration):
         p_mesh_crop = poisson_mesh.crop(bbox)
 
         o3d.io.write_triangle_mesh(self._output_name + ".stl", p_mesh_crop)
-
-    def testPointClouds(self):
-        points = []
-
-        for i in range(11):
-            for j in range(11):
-                points.append([i/10.0, j/10.0, 0])
-
-        for i in range(11):
-            for j in range(11):
-                points.append([i/10.0, j/10.0, 1])
-
-        for i in range(11):
-            for j in range(11):
-                points.append([i/10.0, 0, j/10.0])
-
-        for i in range(11):
-            for j in range(11):
-                points.append([0, i/10.0, j/10.0])
-
-        for i in range(11):
-            for j in range(11):
-                points.append([i/10.0, 1, j/10.0])
-
-        for i in range(11):
-            for j in range(11):
-                points.append([1, i/10.0, j/10.0])
-
-        self.exportToPCD("./out/test1.pcd", points)
-        self.exportToSTL("./out/test1.stl", points)

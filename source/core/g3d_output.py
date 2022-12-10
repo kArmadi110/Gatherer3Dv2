@@ -1,10 +1,9 @@
 import numpy as np
 
 from core.config_types import Config
-from core.base_channel import BaseChannel
 
 
-class G3DOutput(BaseChannel):
+class G3DOutput():
     def __init__(self, cfg: Config):
         self._cfg = cfg
 

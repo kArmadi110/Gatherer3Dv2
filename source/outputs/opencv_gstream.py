@@ -3,7 +3,7 @@ import cv2
 
 from core.config_types import Config
 
-from outputs.g3d_output import G3DOutput
+from core.g3d_output import G3DOutput
 
 
 class CV2Gstream(G3DOutput):

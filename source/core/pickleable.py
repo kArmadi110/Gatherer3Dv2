@@ -1,7 +1,7 @@
 import pickle
 
 
-class BaseChannel():
+class Pickleable():
     def load(self, filename):
 
         with open(filename, "rb") as infile:

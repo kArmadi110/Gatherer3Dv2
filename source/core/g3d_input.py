@@ -2,10 +2,9 @@ import numpy as np
 import RPi.GPIO
 
 from core.config_types import Config
-from core.base_channel import BaseChannel
 
 
-class G3DInput(BaseChannel):
+class G3DInput():
     def __init__(self, cfg: Config):
         self._cfg = cfg
 

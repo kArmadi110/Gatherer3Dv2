@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from typing import List
 from core.config_constants import *
 import core.config_types as g3d_cfg
 import inputs as g3d_in

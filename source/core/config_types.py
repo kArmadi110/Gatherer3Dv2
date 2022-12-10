@@ -45,6 +45,9 @@ class BoardDescriptor():
 
 @dataclass
 class Config():
+    is_async_mode: bool
+    async_q_limit: bool
+
     input_mode: InputMode
     output_mode: List
     calib_mode: CalibMode
