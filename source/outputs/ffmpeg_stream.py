@@ -1,8 +1,9 @@
-import numpy as np
-import cv2
 import subprocess
 
-from config_types import Config
+import numpy as np
+import cv2
+
+from core.config_types import Config
 
 from outputs.g3d_output import G3DOutput
 
@@ -25,7 +26,7 @@ class FFMPEGStream(G3DOutput):
                                          '-f', 'flv',
                                          f'{self._cfg.output_folder+self._cfg.output_name}'], stdin=subprocess.PIPE)
 
-    def process_frame(self, frame: np.array):
+    def process_frame(self, frame: np.array) -> bool:
         self._stream.stdin.write(cv2.resize(frame, self._cfg.streamer_res).tobytes())
 
     def deinit(self):

@@ -1,6 +1,5 @@
 from enum import Enum
 from dataclasses import dataclass
-from dataclasses import dataclass, field
 from typing import List
 from typing import Tuple
 
@@ -36,12 +35,12 @@ class SegmentationMode(Enum):
 
 @dataclass
 class BoardDescriptor():
-    printSizeX: int = 2200
-    printSizeY: int = 2200
-    boardDimX: int = 11
-    boardDimY: float = 11
-    squareSize: int = 0.02
-    markerSize: int = 0.01
+    print_size_x: int = 2200
+    print_size_x: int = 2200
+    board_dim_x: int = 11
+    board_dim_y: float = 11
+    square_size: int = 0.02
+    marker_size: int = 0.01
 
 
 @dataclass

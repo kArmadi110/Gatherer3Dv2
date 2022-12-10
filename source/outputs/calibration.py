@@ -1,7 +1,7 @@
 import numpy as np
 import pickle
 from outputs.g3d_output import G3DOutput
-from config_types import *
+from core.config_types import *
 import cv2
 from cv2 import aruco
 from scipy.linalg import lstsq
@@ -9,12 +9,11 @@ from scipy.linalg import lstsq
 
 class G3DCalibration(G3DOutput):
     def __init__(self, cfg: Config):
-        G3DOutput.__init__(self, cfg.output_path)
-        self._cfg = cfg
-        self.counter = 0
-
+        G3DOutput.__init__(self, cfg)
         self._aruco_dict = None
         self._charuco_board = None
+
+        self.counter = 0
 
         self.allCorners = []
         self.allIds = []

@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-from config_types import Config
+from core.config_types import Config
 
 from outputs.g3d_output import G3DOutput
 
@@ -15,7 +15,7 @@ class CV2Video(G3DOutput):
                                              self._cfg.input_fps,
                                              self._cfg.resolution)
 
-    def process_frame(self, frame: np.array):
+    def process_frame(self, frame: np.array) -> bool:
         self._output_video.write(frame)
 
     def deinit(self):

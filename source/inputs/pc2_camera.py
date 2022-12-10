@@ -1,7 +1,7 @@
 import numpy as np
 from picamera2 import Picamera2
 
-from config_types import Config
+from core.config_types import Config
 
 from inputs.g3d_input import G3DInput
 
@@ -20,7 +20,7 @@ class PC2Camera(G3DInput):
         self._cap.start()
 
     def deinit(self):
-        G3DInput.deinit()
+        G3DInput.deinit(self)
 
         self._cap.stop()
 
@@ -32,5 +32,5 @@ class PC2Camera(G3DInput):
 
         return frame
 
-    def isOpen(self) -> bool:
+    def is_open(self) -> bool:
         return self._stream_state

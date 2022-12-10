@@ -3,8 +3,8 @@ from numpy.linalg import inv
 import open3d as o3d
 from outputs.calibration import G3DCalibration
 import cv2
-from config_types import CalibrationType
-from config_types import *
+from core.config_types import *
+
 from cv2 import aruco
 
 

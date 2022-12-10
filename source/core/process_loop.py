@@ -13,22 +13,22 @@ class ProcessLoop():
         self._input_stream = input_stream
         self._output_streams = output_streams
 
-        self._threadCtrl = self._input_stream.isOpen()
+        self._thread_ctrl = self._input_stream.is_open()
         self._counter = 0
 
-    def sigint_handler(self, sig, frame):
-        self._threadCtrl = False
+    def sigint_handler(self, sig, frame):  # pylint: disable=unused-argument
+        self._thread_ctrl = False
         print("Please wait for shutdown!")
 
     def deinit(self):
         self._input_stream.deinit()
-        for os in self._output_streams:
-            os.deinit()
+        for ostream in self._output_streams:
+            ostream.deinit()
 
     def run(self):
         frame = self._input_stream.read()
 
-        while (self._threadCtrl and self._input_stream.isOpen()):
+        while (self._thread_ctrl and self._input_stream.is_open()):
             for i in self._output_streams:
                 i.process_frame(frame)
             frame = self._input_stream.read()

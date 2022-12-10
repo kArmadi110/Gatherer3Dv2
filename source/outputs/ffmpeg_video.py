@@ -1,8 +1,9 @@
 
-import numpy as np
 import subprocess
 
-from config_types import Config
+import numpy as np
+
+from core.config_types import Config
 
 from outputs.g3d_output import G3DOutput
 
@@ -25,7 +26,7 @@ class FFMPEGVideo(G3DOutput):
                                                stdin=subprocess.PIPE,
                                                bufsize=2*3*self._cfg.resolution[0]*self._cfg.resolution[1])
 
-    def process_frame(self, frame: np.array):
+    def process_frame(self, frame: np.array) -> bool:
         self._ffmpeg_output.stdin.write(frame.tobytes())
 
     def deinit(self):

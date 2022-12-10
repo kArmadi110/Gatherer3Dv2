@@ -1,15 +1,17 @@
-from config_types import *
+from dataclasses import field
+
+from core.config_types import Config, InputMode, OutputMode, CalibMode
 
 
-class Constants:
+class G3DConstants:
     recording_config = Config(
         input_mode=InputMode.CAMERA,
         output_mode=field(default_factory=lambda: [OutputMode.VIDEO, OutputMode.STREAM]),
         calib_mode=CalibMode.IMPORT,
 
-        input_folder="./02_out/",
-        output_path="./02_out/",
-        output_file="YODA",
+        input_folder="./bin/",
+        output_folder="./bin/",
+        output_name="YODA",
         input_name="/dev/video0",
 
         resolution=(1640, 1232),
@@ -28,9 +30,9 @@ class Constants:
         output_mode=field(default_factory=lambda: [OutputMode.MESH, OutputMode.STREAM]),
         calib_mode=CalibMode.IMPORT,
 
-        input_folder="./02_out/",
-        output_path="./02_out/",
-        output_file="YODA",
+        input_folder="./bin/",
+        output_folder="./bin/",
+        output_name="YODA",
         input_name="/dev/video0",
 
         resolution=(1640, 1232),
@@ -49,9 +51,9 @@ class Constants:
         output_mode=field(default_factory=lambda: [OutputMode.CALIBRATION, OutputMode.STREAM]),
         calib_mode=CalibMode.IMPORT,
 
-        input_folder="./02_out/",
-        output_path="./02_out/",
-        output_file="YODA",
+        input_folder="./bin/",
+        output_folder="./bin/",
+        output_name="YODA",
         input_name="/dev/video0",
 
         resolution=(1640, 1232),
@@ -70,9 +72,9 @@ class Constants:
         output_mode=field(default_factory=lambda: [OutputMode.CALIBRATION, OutputMode.STREAM]),
         calib_mode=CalibMode.IMPORT,
 
-        input_folder="./02_out/",
-        output_path="./02_out/",
-        output_file="",
+        input_folder="./bin/",
+        output_folder="./bin/",
+        output_name="",
         input_name="calib.mp4",
 
         resolution=(1640, 1232),

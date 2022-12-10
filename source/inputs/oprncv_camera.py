@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-from config_types import Config
+from core.config_types import Config
 
 from inputs.g3d_input import G3DInput
 
@@ -17,25 +17,26 @@ class OpenCVCamera(G3DInput):
         # self._cap = cv2.VideoCapture(f" libcamerasrc ! video/x-raw, width=(int){self._cfg.resolution[0]}, height=(int){self._cfg.resolution[1]}" "," +
         #                             f" framerate=(fraction){self._cfg.input_fps}/1 !" +
         #                             " videoconvert ! videoscale !" +
-        #                             " video/x-raw, width=(int){self._cfg.resolution[0]}, height=(int){self._cfg.resolution[1]} ! appsink", cv2.CAP_GSTREAMER)
+        #                             " video/x-raw, width=(int){self._cfg.resolution[0]}, height=(int){self._cfg.resolution[1]} ! appsink",
+        #                             cv2.CAP_GSTREAMER)
 
         self._cap = cv2.VideoCapture(int(self._cfg.input_name), apiPreference=cv2.CAP_V4L, params=[
             cv2.CAP_PROP_FRAME_WIDTH, self._cfg.resolution[0],
             cv2.CAP_PROP_FRAME_HEIGHT, self._cfg.resolution[1],
             cv2.CAP_PROP_FPS, self._cfg.input_fps])
 
-        if (self._cfg.input_exposure > 0):
+        if self._cfg.input_exposure > 0:
             self._cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
             self._cap.set(cv2.CAP_PROP_EXPOSURE, self._cfg.input_exposure)
 
     def deinit(self):
-        G3DInput.deinit()
-        self.cap.release()
+        G3DInput.deinit(self)
+        self._cap.release()
 
     def read(self) -> np.array:
-        self._stream_state, frame = self.cap.read()
+        self._stream_state, frame = self._cap.read()
 
         return frame
 
-    def isOpen(self) -> bool:
-        return self.cap.isOpened() and self._stream_state
+    def is_open(self) -> bool:
+        return self._cap.isOpened() and self._stream_state

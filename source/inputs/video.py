@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-from config_types import Config
+from core.config_types import Config
 
 from inputs.g3d_input import G3DInput
 
@@ -21,5 +21,5 @@ class G3DVideoIn(G3DInput):
     def deinit(self):
         self._cap.release()
 
-    def isOpen(self) -> bool:
+    def is_open(self) -> bool:
         return self._cap.isOpened() and self._stream_state

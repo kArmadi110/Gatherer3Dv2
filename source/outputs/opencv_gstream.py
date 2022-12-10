@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
-from config_types import Config
+
+from core.config_types import Config
 
 from outputs.g3d_output import G3DOutput
 
@@ -17,7 +18,7 @@ class CV2Gstream(G3DOutput):
         if not self._stream.isOpened():
             raise Exception("Streaming error!")
 
-    def process_frame(self, frame: np.array):
+    def process_frame(self, frame: np.array) -> bool:
         self._stream.write(cv2.resize(frame, self._cfg.resolution))
 
     def deinit(self):
