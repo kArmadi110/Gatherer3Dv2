@@ -35,7 +35,7 @@ class SegmentationMode(Enum):
 @dataclass
 class BoardDescriptor():
     print_size_x: int = 2200
-    print_size_x: int = 2200
+    print_size_y: int = 2200
     board_dim_x: int = 11
     board_dim_y: float = 11
     square_size: int = 0.02
@@ -64,6 +64,8 @@ class Config():
     streaner_path: str
 
     laser_gpio: int
+    color_mode: bool
+    segmentation_mode: SegmentationMode
 
     pos_confidence_th: int
     calib_board: BoardDescriptor = BoardDescriptor()

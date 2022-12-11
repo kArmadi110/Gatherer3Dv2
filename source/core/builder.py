@@ -30,8 +30,8 @@ class G3DBuilder():
             result.append(g3d_out.Images(self._cfg))
 
         if g3d_cfg.OutputMode.STREAM in self._cfg.output_mode:
-            result.append(g3d_out.CV2Gstream(self._cfg))
-            # result.append(g3d_out.FFMPEGStream(self._cfg))
+            # result.append(g3d_out.CV2Gstream(self._cfg))
+            result.append(g3d_out.FFMPEGStream(self._cfg))
 
         if g3d_cfg.OutputMode.CALIB_BOARD in self._cfg.output_mode:
             temp = g3d_out.CameraCalibration(self._cfg)
@@ -41,11 +41,11 @@ class G3DBuilder():
             sys.exit(0)
 
         if g3d_cfg.OutputMode.CALIBRATION in self._cfg.output_mode:
-            if g3d_cfg.CalibMode.CAMERA != self._cfg.calib_mode:
+            if g3d_cfg.CalibMode.CAMERA == self._cfg.calib_mode:
                 result.append(g3d_out.CameraCalibration(self._cfg))
-            elif g3d_cfg.CalibMode.LASER != self._cfg.calib_mode:
+            elif g3d_cfg.CalibMode.LASER == self._cfg.calib_mode:
                 result.append(g3d_out.LaserCalibration(self._cfg))
-            elif g3d_cfg.CalibMode.EXPOSURE != self._cfg.calib_mode:
+            elif g3d_cfg.CalibMode.EXPOSURE == self._cfg.calib_mode:
                 result.append(g3d_out.ExposureCalibration(self._cfg))
 
         if g3d_cfg.OutputMode.MESH in self._cfg.output_mode:

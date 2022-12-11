@@ -1,6 +1,7 @@
 from typing import Tuple, List
 import numpy as np
 import cv2
+import open3d as o3d
 
 from core.config_types import Config, CalibMode, SegmentationMode
 from core.pickleable import Pickleable
@@ -42,17 +43,24 @@ class Base(G3DOutput):
         self._laser_points = []
         self._colors = []
 
-        if self._cfg.calib_mode == CalibMode.IMPORT:
-            self.load()
+        self._success = 0
+        self._frame_num = 0
+
+        # if self._cfg.calib_mode == CalibMode.IMPORT:
+        self.load()
 
         self._generate_charuco_plane()
 
     def deinit(self):
         if self._cfg.calib_mode != CalibMode.IMPORT:
             self._members.save()
+        self.export_report()
 
     def load(self):
         self._members.load()
+
+    def export_report(self):
+        return NotImplementedError
 
     def get_laser_points(self, frame: np.array, mask_corners: List = None):
         if mask_corners:
@@ -74,20 +82,20 @@ class Base(G3DOutput):
     def _generate_charuco_plane(self):
         self._aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_250)
         self._charuco_board = cv2.aruco.CharucoBoard_create(
-            self._cfg.calib_board.boardDimX, self._cfg.calib_board.boardDimY,
-            self._cfg.calib_board.squareSize, self._cfg.calib_board.markerSize,
+            self._cfg.calib_board.board_dim_x, self._cfg.calib_board.board_dim_y,
+            self._cfg.calib_board.square_size, self._cfg.calib_board.marker_size,
             self._aruco_dict)
 
     def generate_charuco_plane(self):
-        imboard = self._charuco_board.draw((self._cfg.calib_board.printSizeX, self._cfg.calib_board.printSizeY))
+        imboard = self._charuco_board.draw((self._cfg.calib_board.print_size_x, self._cfg.calib_board.print_size_y))
         cv2.imwrite(self._cfg.output_folder + f"{self._cfg.output_name}.png", imboard)
 
     def generate_checker_plane(self):
-        result = np.zeros([self._cfg.calib_board.printSizeX, self._cfg.calib_board.printSizeY, 1], dtype=np.uint8)
-        square_size = int(self._cfg.calib_board.printSizeX/self._cfg.calib_board.boardDimX*2)
+        result = np.zeros([self._cfg.calib_board.print_size_x, self._cfg.calib_board.print_size_y, 1], dtype=np.uint8)
+        square_size = int(self._cfg.calib_board.print_size_x/self._cfg.calib_board.board_dim_x*2)
 
-        for pos_x in range(0, int(self._cfg.calib_board.boardDimX/2)):
-            for pos_y in range(0, int(self._cfg.calib_board.boardDimY/2)):
+        for pos_x in range(0, int(self._cfg.calib_board.board_dim_x/2)):
+            for pos_y in range(0, int(self._cfg.calib_board.board_dim_y/2)):
                 if pos_x % 2 == pos_y % 2:
                     for i in range(0, square_size):
                         for j in range(0, square_size):
@@ -201,3 +209,26 @@ class Base(G3DOutput):
                 last_non_zero = i
 
         return result, colors
+
+    def export_pcd(self, points_3d):
+        pcd = o3d.geometry.PointCloud()
+        pcd.points = o3d.utility.Vector3dVector(points_3d)
+
+        if len(self._colors) > 0:
+            pcd.colors = o3d.utility.Vector3dVector(np.array(self._colors).astype(np.float) / 255.0)
+
+        o3d.io.write_point_cloud(self._cfg.output_folder + self._cfg.output_name + ".pcd", pcd)
+
+    def export_stl(self, points_3d):
+        pcd = o3d.geometry.PointCloud()
+        pcd.points = o3d.utility.Vector3dVector(points_3d)
+
+        pcd.estimate_normals()
+
+        poisson_mesh = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(pcd, depth=9, width=0, scale=1.1, linear_fit=False)[0]
+        poisson_mesh = o3d.geometry.TriangleMesh.compute_triangle_normals(poisson_mesh)
+
+        bbox = pcd.get_axis_aligned_bounding_box()
+        p_mesh_crop = poisson_mesh.crop(bbox)
+
+        o3d.io.write_triangle_mesh(self._cfg.output_folder+self._cfg.output_name + ".stl", p_mesh_crop)

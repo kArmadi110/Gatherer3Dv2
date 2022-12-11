@@ -1,5 +1,4 @@
 import numpy as np
-import open3d as o3d
 from outputs.calibration.base import Base
 import cv2
 from core.config_types import Config
@@ -88,21 +87,7 @@ class Mesh(Base):
         self.export_stl()
 
     def export_pcd(self):
-        pcd = o3d.geometry.PointCloud()
-        pcd.points = o3d.utility.Vector3dVector(self._points_3d)
-        pcd.colors = o3d.utility.Vector3dVector(np.array(self._colors).astype(np.float) / 255.0)
-        o3d.io.write_point_cloud(self._cfg.output_path + self._cfg.output_name + ".pcd", pcd)
+        Base.export_pcd(self, self._points_3d)
 
     def export_stl(self):
-        pcd = o3d.geometry.PointCloud()
-        pcd.points = o3d.utility.Vector3dVector(self._points_3d)
-
-        pcd.estimate_normals()
-
-        poisson_mesh = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(pcd, depth=9, width=0, scale=1.1, linear_fit=False)[0]
-        poisson_mesh = o3d.geometry.TriangleMesh.compute_triangle_normals(poisson_mesh)
-
-        bbox = pcd.get_axis_aligned_bounding_box()
-        p_mesh_crop = poisson_mesh.crop(bbox)
-
-        o3d.io.write_triangle_mesh(self._cfg.output_folder+self._cfg.output_name + ".stl", p_mesh_crop)
+        Base.export_stl(self, self._points_3d)
