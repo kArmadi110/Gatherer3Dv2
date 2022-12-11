@@ -66,5 +66,5 @@ class Config():
 
     laser_gpio: int
 
-    pos_certainty_th: int
+    pos_confidence_th: int
     calib_board: BoardDescriptor = BoardDescriptor()

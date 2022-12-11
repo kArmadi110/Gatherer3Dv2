@@ -3,54 +3,18 @@ import cv2
 
 from core.config_types import Config
 
-from outputs.calibration.base import CalibrationBase
+from outputs.calibration.base import Base
 
 
-class CameraCalibration(CalibrationBase):
+class CameraCalibration(Base):
     def __init__(self, cfg: Config):
-        CalibrationBase.__init__(self, cfg)
+        Base.__init__(self, cfg)
 
     def process_frame(self, frame: np.array):
-        self._read_chessboards(frame)
-
-    def calibrate(self):
-        """
-        Calibrates the camera using the dected corners.
-        """
-        print("CAMERA CALIBRATION")
-        print(f"{self.allCorners} {self.allIds}")
-        print(f"{len(self.allCorners)} {len(self.allIds)}")
-
-        distCoeffsInit = np.zeros((5, 1))
-        flags = (cv2.CALIB_USE_INTRINSIC_GUESS +
-                 cv2.CALIB_RATIONAL_MODEL + cv2.CALIB_FIX_ASPECT_RATIO)
-        # flags = (cv2.CALIB_RATIONAL_MODEL)
-        (ret, self.camera_matrix, self.distortion_coefficients0,
-         self.rotation_vectors, self.translation_vectors,
-         self.stdDeviationsIntrinsics, self.stdDeviationsExtrinsics,
-         self.perViewErrors) = cv2.aruco.calibrateCameraCharucoExtended(
-            charucoCorners=self.allCorners,
-            charucoIds=self.allIds,
-            board=self._charuco_board,
-            imageSize=self._cfg.resolution,
-            cameraMatrix=self.cameraMatrixInit,
-            distCoeffs=distCoeffsInit,
-            flags=flags,
-            criteria=(cv2.TERM_CRITERIA_EPS & cv2.TERM_CRITERIA_COUNT, 10000, 1e-9))
-        # self.testWithAxes(self.camera_matrix, self.distortion_coefficients0, self.rotation_vectors, self.translation_vectors)
-
-    def _read_chessboards(self, frame):
-        """
-        Charuco base pose estimation.
-        """
-        self.counter += 1
-        print(self.counter)
-
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(
-            gray, self._aruco_dict)
+        corners, ids, _ = cv2.aruco.detectMarkers(gray, self._aruco_dict)
 
-        if len(corners) > 0.15*len(self._charuco_board.chessboardCorners):
+        if len(corners) > self._cfg.pos_confidence_th*len(self._charuco_board.chessboardCorners):
             for corner in corners:
                 cv2.cornerSubPix(gray, corner,
                                  winSize=(3, 3),
@@ -59,14 +23,31 @@ class CameraCalibration(CalibrationBase):
             res2 = cv2.aruco.interpolateCornersCharuco(corners, ids, gray, self._charuco_board)
 
             if res2[1] is not None and res2[2] is not None:
+                self._all_corners.append(res2[1])
+                self._all_ids.append(res2[2])
 
-                if (self.selectedFrame is None):
-                    self.selectedFrame = frame
+    def deinit(self):
+        dist_coeffs_init = np.zeros((5, 1))
 
-                self.allCorners.append(res2[1])
-                self.allIds.append(res2[2])
-                objPoints, imagepoints = aruco.getBoardObjectAndImagePoints(self._charuco_board, corners, ids)
-                self.laserPoints.append(self.getLaserPoints(frame, imagepoints))
-                cv2.imwrite(f"./02_out/temp/to_segment{self.counter}.png", frame)
+        camera_mtx_init = np.array([[1000.,       0., self._cfg.resolution[0]/2.],
+                                    [0.,       1000., self._cfg.resolution[1]/2.],
+                                    [0.,          0.,                         1.]])
 
-        self.imsize = gray.shape
+        flags = (cv2.CALIB_USE_INTRINSIC_GUESS +
+                 cv2.CALIB_RATIONAL_MODEL + cv2.CALIB_FIX_ASPECT_RATIO)
+        # flags = (cv2.CALIB_RATIONAL_MODEL)
+        (ret, self._members.camera_matrix, self._members.distortion_coefficients,
+         self._rotation_vectors, self._translation_vectors,
+         _, _, _) = cv2.aruco.calibrateCameraCharucoExtended(
+            charucoCorners=self._all_corners,
+            charucoIds=self._all_ids,
+            board=self._charuco_board,
+            imageSize=self._cfg.resolution,
+            cameraMatrix=camera_mtx_init,
+            distCoeffs=dist_coeffs_init,
+            flags=flags,
+            criteria=(cv2.TERM_CRITERIA_EPS & cv2.TERM_CRITERIA_COUNT, 10000, 1e-9))
+        if not ret:
+            raise RuntimeError("Failed to calibrate the camera")
+
+        Base.deinit(self)

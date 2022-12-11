@@ -25,7 +25,7 @@ class G3DConstants:
         streaner_path="rtsp://localhost:8554/G3D",
 
         laser_gpio=14,
-        pos_certainty_th=0.1
+        pos_confidence_th=0.1
     )
 
     scann_config1 = Config(
@@ -49,7 +49,7 @@ class G3DConstants:
         streaner_path="rtsp://localhost:8554/G3D",
 
         laser_gpio=14,
-        pos_certainty_th=0.1
+        pos_confidence_th=0.1
     )
 
     calib_config1 = Config(
@@ -73,7 +73,7 @@ class G3DConstants:
         streaner_path="rtsp://localhost:8554/G3D",
 
         laser_gpio=14,
-        pos_certainty_th=0.1
+        pos_confidence_th=0.1
     )
 
     calib_config2 = Config(
@@ -97,7 +97,7 @@ class G3DConstants:
         streaner_path="rtsp://localhost:8554/G3D",
 
         laser_gpio=14,
-        pos_certainty_th=0.1
+        pos_confidence_th=0.1
     )
 
     main_config = None
