@@ -35,7 +35,6 @@ class CameraCalibration(Base):
 
         flags = (cv2.CALIB_USE_INTRINSIC_GUESS +
                  cv2.CALIB_RATIONAL_MODEL + cv2.CALIB_FIX_ASPECT_RATIO)
-        # flags = (cv2.CALIB_RATIONAL_MODEL)
         (ret, self._members.camera_matrix, self._members.distortion_coefficients,
          self._rotation_vectors, self._translation_vectors,
          _, _, _) = cv2.aruco.calibrateCameraCharucoExtended(

@@ -23,8 +23,7 @@ class CalibMode(Enum):
     CAMERA = 0
     LASER = 1
     EXPOSURE = 2
-    FULL = 3
-    IMPORT = 4
+    IMPORT = 3
 
 
 class SegmentationMode(Enum):
@@ -49,7 +48,7 @@ class Config():
     async_q_limit: bool
 
     input_mode: InputMode
-    output_mode: List
+    output_mode: List[OutputMode]
     calib_mode: CalibMode
 
     input_folder: str

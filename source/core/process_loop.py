@@ -1,6 +1,7 @@
 import signal
-from inputs import G3DInput
-from outputs import G3DOutput
+from core.g3d_input import G3DInput
+from core.g3d_output import G3DOutput
+import time
 
 
 class ProcessLoop():
@@ -27,10 +28,16 @@ class ProcessLoop():
 
     def run(self):
         frame = self._input_stream.read()
+        start = time.time()
 
         while (self._thread_ctrl and self._input_stream.is_open()):
+            self._counter += 1
+
             for i in self._output_streams:
                 i.process_frame(frame)
+
             frame = self._input_stream.read()
+            if time.time()-start > 5:
+                break
 
         self.deinit()

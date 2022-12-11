@@ -23,6 +23,7 @@ class G3DAsyncOutput(G3DOutput):
         self._input_queue.join()
 
         self._thread_ctrl = False
+        self._input_queue.put(None)
         self._thread.join()
 
         self._core.deinit()
@@ -37,5 +38,7 @@ class G3DAsyncOutput(G3DOutput):
     def loop(self):
         while self._thread_ctrl:
             frame = self._input_queue.get()
-            self._core.process_frame(frame)
-            self._input_queue.task_done()
+
+            if frame is not None:
+                self._core.process_frame(frame)
+                self._input_queue.task_done()

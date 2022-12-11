@@ -25,9 +25,11 @@ class FFMPEGVideo(G3DOutput):
                                                 f'{self._cfg.output_folder + self._cfg.output_name}.mp4'],
                                                stdin=subprocess.PIPE,
                                                bufsize=2*3*self._cfg.resolution[0]*self._cfg.resolution[1])
+        self._counter = 0
 
     def process_frame(self, frame: np.array) -> bool:
         self._ffmpeg_output.stdin.write(frame.tobytes())
+        self._counter += 1
 
     def deinit(self):
         self._ffmpeg_output.stdin.close()

@@ -13,7 +13,8 @@ class PC2Camera(G3DInput):
         self._stream_state = True
 
         self._cap = Picamera2()
-        self._cap.configure(self._cap.create_video_configuration(main={"format": 'BGR888', "size": (self._cfg.resolution[0], self._cfg.resolution[1])}))
+        self._cap.configure(self._cap.create_video_configuration(main={"format": 'RGB888', "size": (self._cfg.resolution[0], self._cfg.resolution[1])}))
+        # self._cap.configure(self._cap.create_video_configuration(main={"format": 'BGR888', "size": (self._cfg.resolution[0], self._cfg.resolution[1])}))
         self._cap.framerate = self._cfg.input_fps
         self._cap.sensor_mode = 4
 

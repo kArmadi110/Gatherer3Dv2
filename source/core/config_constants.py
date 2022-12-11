@@ -1,5 +1,3 @@
-from dataclasses import field
-
 from core.config_types import Config, InputMode, OutputMode, CalibMode
 
 
@@ -9,7 +7,7 @@ class G3DConstants:
         async_q_limit=5,
 
         input_mode=InputMode.CAMERA,
-        output_mode=field(default_factory=lambda: [OutputMode.VIDEO, OutputMode.STREAM]),
+        output_mode=[OutputMode.VIDEO],  # , OutputMode.STREAM
         calib_mode=CalibMode.IMPORT,
 
         input_folder="./bin/",
@@ -18,7 +16,7 @@ class G3DConstants:
         input_name="/dev/video0",
 
         resolution=(1640, 1232),
-        input_fps=15,
+        input_fps=30,
         input_exposure=100,
 
         streamer_res=(640, 480),
@@ -33,7 +31,7 @@ class G3DConstants:
         async_q_limit=5,
 
         input_mode=InputMode.CAMERA,
-        output_mode=field(default_factory=lambda: [OutputMode.MESH, OutputMode.STREAM]),
+        output_mode=[OutputMode.MESH, OutputMode.STREAM],
         calib_mode=CalibMode.IMPORT,
 
         input_folder="./bin/",
@@ -57,7 +55,7 @@ class G3DConstants:
         async_q_limit=5,
 
         input_mode=InputMode.CAMERA,
-        output_mode=field(default_factory=lambda: [OutputMode.CALIBRATION, OutputMode.STREAM]),
+        output_mode=[OutputMode.CALIBRATION, OutputMode.STREAM],
         calib_mode=CalibMode.IMPORT,
 
         input_folder="./bin/",
@@ -81,7 +79,7 @@ class G3DConstants:
         async_q_limit=5,
 
         input_mode=InputMode.VIDEO,
-        output_mode=field(default_factory=lambda: [OutputMode.CALIBRATION, OutputMode.STREAM]),
+        output_mode=[OutputMode.CALIBRATION, OutputMode.STREAM],
         calib_mode=CalibMode.IMPORT,
 
         input_folder="./bin/",
