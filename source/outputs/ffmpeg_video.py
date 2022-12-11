@@ -7,6 +7,8 @@ from core.config_types import Config
 
 from core.g3d_output import G3DOutput
 
+# TODO: ffmpeg buffer error with 1640x1232
+
 
 class FFMPEGVideo(G3DOutput):
     def __init__(self, cfg: Config):
@@ -16,12 +18,15 @@ class FFMPEGVideo(G3DOutput):
                                                 '-y',
                                                '-f', 'rawvideo',
                                                 '-vcodec', 'rawvideo',
-                                                "-framerate", "30",
-                                                '-pix_fmt', 'bgr24',
+                                                "-framerate", f"{self._cfg.input_fps}",
+                                                '-pix_fmt', 'bgr24',  # yuv420p, nv12, bgr24
                                                 '-s', f"{self._cfg.resolution[0]}x{self._cfg.resolution[1]}",
-                                                '-r', str(self._cfg.input_fps),
+                                                '-r', f"{self._cfg.input_fps}",
                                                 '-i', '-',
-                                                '-c:v', 'h264_v4l2m2m',
+                                                # '-b:v', '30k',
+                                                '-c:v', 'mpeg4_v4l2m2m',
+                                                # '-c:v', 'h264_omx', # not working on 64 bit os
+                                                # '-flush_packets', '1',
                                                 f'{self._cfg.output_folder + self._cfg.output_name}.mp4'],
                                                stdin=subprocess.PIPE,
                                                bufsize=2*3*self._cfg.resolution[0]*self._cfg.resolution[1])

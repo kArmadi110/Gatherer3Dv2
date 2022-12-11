@@ -11,10 +11,10 @@ from core.g3d_input import G3DInput
 
 class Images(G3DInput):
     def __init__(self, cfg: Config):
-        G3DInput.__init__(cfg)
+        G3DInput.__init__(self, cfg)
 
-        self._frame_list = [f for f in listdir(self._cfg.input_folder)
-                            if f.contains(self._cfg.input_name) and
+        self._frame_list = [join(self._cfg.input_folder, f) for f in listdir(self._cfg.input_folder)
+                            if self._cfg.input_name in f and
                             isfile(join(self._cfg.input_folder, f))]
         self._frame_id = 0
         self._stream_state = True

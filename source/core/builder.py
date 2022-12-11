@@ -64,6 +64,7 @@ class G3DBuilder():
 
         if self._cfg.input_mode == g3d_cfg.InputMode.CAMERA:
             result = g3d_in.PC2Camera(self._cfg)
+            # result = g3d_in.CV2Camera(self._cfg)
         elif self._cfg.input_mode == g3d_cfg.InputMode.IMAGES:
             result = g3d_in.Images(self._cfg)
         elif self._cfg.input_mode == g3d_cfg.InputMode.VIDEO:

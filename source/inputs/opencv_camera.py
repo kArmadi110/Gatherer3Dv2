@@ -5,8 +5,10 @@ from core.config_types import Config
 
 from core.g3d_input import G3DInput
 
+# TODO: test with legacy camera
 
-class OpenCVCamera(G3DInput):
+
+class CV2Camera(G3DInput):
     def __init__(self, cfg: Config):
         G3DInput.__init__(self, cfg)
 

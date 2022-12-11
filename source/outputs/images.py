@@ -14,8 +14,8 @@ class Images(G3DOutput):
         self._output_path = self._cfg.output_folder + self._cfg.output_name + "{}.png"
 
     def process_frame(self, frame: np.array) -> bool:
-        if not frame.empty():
-            raise Exception("Empty frame received")
+        # if frame == None:
+        #     raise Exception("Empty frame received")
 
         cv2.imwrite(self._output_path.format(self._counter), frame)
         self._counter += 1

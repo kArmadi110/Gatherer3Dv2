@@ -3,17 +3,18 @@ from core.config_types import Config, InputMode, OutputMode, CalibMode
 
 class G3DConstants:
     recording_config = Config(
-        is_async_mode=True,
+        is_async_mode=False,
         async_q_limit=5,
 
-        input_mode=InputMode.CAMERA,
+        input_mode=InputMode.IMAGES,
         output_mode=[OutputMode.VIDEO],  # , OutputMode.STREAM
         calib_mode=CalibMode.IMPORT,
 
         input_folder="./bin/",
         output_folder="./bin/",
-        output_name="YODA",
-        input_name="/dev/video0",
+        output_name="YODA3",
+        # input_name="/dev/video0",
+        input_name="YODASD2_",
 
         resolution=(1640, 1232),
         input_fps=30,

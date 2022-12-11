@@ -12,14 +12,14 @@ class CV2Gstream(G3DOutput):
 
         self._stream = cv2.VideoWriter('appsrc ! videoconvert' +
                                        ' ! x264enc tune=zerolatency speed-preset=ultrafast bitrate=900000 key-int-max=40' +
-                                       f' ! rtspclientsink location={self._cfg.output_folder+self._cfg.output_name}', cv2.CAP_GSTREAMER, 0,
-                                       fps=self._cfg.input_fps, frameSize=self._cfg.resolution)
+                                       f' ! rtspclientsink location={self._cfg.streaner_path}', cv2.CAP_GSTREAMER, 0,
+                                       fps=self._cfg.input_fps, frameSize=self._cfg.streamer_res)
 
         if not self._stream.isOpened():
             raise Exception("Streaming error!")
 
     def process_frame(self, frame: np.array) -> bool:
-        self._stream.write(cv2.resize(frame, self._cfg.resolution))
+        self._stream.write(cv2.resize(frame, self._cfg.streamer_res))
 
     def deinit(self):
         self._stream.release()

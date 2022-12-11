@@ -37,7 +37,7 @@ class ProcessLoop():
                 i.process_frame(frame)
 
             frame = self._input_stream.read()
-            if time.time()-start > 5:
+            if time.time()-start > 30:
                 break
 
         self.deinit()

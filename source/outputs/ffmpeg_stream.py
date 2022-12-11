@@ -17,14 +17,15 @@ class FFMPEGStream(G3DOutput):
                                          '-f', 'rawvideo',
                                          '-vcodec', 'rawvideo',
                                          '-pix_fmt', 'bgr24',
-                                         '-s', f"{self._cfg.resolution[0]}x{self._cfg.resolution[1]}",
+                                         '-s', f"{self._cfg.streamer_res[0]}x{self._cfg.streamer_res[1]}",
                                          '-r', str(self._cfg.input_fps),
                                          '-i', '-',
                                          '-c:v', 'libx264',
                                          '-pix_fmt', 'yuv420p',
                                          '-preset', 'ultrafast',
-                                         '-f', 'flv',
-                                         f'{self._cfg.output_folder+self._cfg.output_name}'], stdin=subprocess.PIPE)
+                                         '-f', 'rtsp',
+                                         '-rtsp_transport', 'tcp',
+                                         f'{self._cfg.streaner_path}'], stdin=subprocess.PIPE)
 
     def process_frame(self, frame: np.array) -> bool:
         self._stream.stdin.write(cv2.resize(frame, self._cfg.streamer_res).tobytes())
