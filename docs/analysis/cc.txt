@@ -1,132 +1,147 @@
-source/inputs/oprncv_camera.py
-    C 9:0 OpenCVCamera - A
-    M 10:4 OpenCVCamera.__init__ - A
-    M 41:4 OpenCVCamera.is_open - A
-    M 32:4 OpenCVCamera.deinit - A
-    M 36:4 OpenCVCamera.read - A
+source/inputs/opencv_camera.py
+    C 9:0 CV2Camera - A
+    M 12:4 CV2Camera.__init__ - A
+    M 43:4 CV2Camera.is_open - A
+    M 34:4 CV2Camera.deinit - A
+    M 38:4 CV2Camera.read - A
 source/inputs/video.py
-    C 9:0 G3DVideoIn - A
-    M 24:4 G3DVideoIn.is_open - A
-    M 10:4 G3DVideoIn.__init__ - A
-    M 16:4 G3DVideoIn.read - A
-    M 21:4 G3DVideoIn.deinit - A
+    C 9:0 Video - A
+    M 26:4 Video.is_open - A
+    M 12:4 Video.__init__ - A
+    M 18:4 Video.read - A
+    M 23:4 Video.deinit - A
 source/inputs/pc2_camera.py
     C 9:0 PC2Camera - A
-    M 27:4 PC2Camera.read - A
-    M 10:4 PC2Camera.__init__ - A
-    M 22:4 PC2Camera.deinit - A
-    M 35:4 PC2Camera.is_open - A
+    M 34:4 PC2Camera.read - A
+    M 12:4 PC2Camera.__init__ - A
+    M 29:4 PC2Camera.deinit - A
+    M 42:4 PC2Camera.is_open - A
 source/inputs/images.py
-    M 13:4 G3DImagesIn.__init__ - A
-    C 12:0 G3DImagesIn - A
-    M 22:4 G3DImagesIn.read - A
-    M 32:4 G3DImagesIn.deinit - A
-    M 35:4 G3DImagesIn.is_open - A
+    M 15:4 Images.__init__ - A
+    C 12:0 Images - A
+    M 27:4 Images.read - A
+    M 37:4 Images.deinit - A
+    M 40:4 Images.is_open - A
 source/outputs/ffmpeg_video.py
     C 11:0 FFMPEGVideo - A
     M 12:4 FFMPEGVideo.__init__ - A
-    M 29:4 FFMPEGVideo.process_frame - A
-    M 32:4 FFMPEGVideo.deinit - A
+    M 39:4 FFMPEGVideo.process_frame - A
+    M 43:4 FFMPEGVideo.deinit - A
 source/outputs/ffmpeg_stream.py
     C 11:0 FFMPEGStream - A
-    M 12:4 FFMPEGStream.__init__ - A
-    M 29:4 FFMPEGStream.process_frame - A
-    M 32:4 FFMPEGStream.deinit - A
+    M 17:4 FFMPEGStream.__init__ - A
+    M 35:4 FFMPEGStream.process_frame - A
+    M 38:4 FFMPEGStream.deinit - A
 source/outputs/opencv_gstream.py
     C 9:0 CV2Gstream - A
-    M 10:4 CV2Gstream.__init__ - A
-    M 21:4 CV2Gstream.process_frame - A
-    M 24:4 CV2Gstream.deinit - A
+    M 12:4 CV2Gstream.__init__ - A
+    M 23:4 CV2Gstream.process_frame - A
+    M 26:4 CV2Gstream.deinit - A
 source/outputs/mesh.py
-    M 26:4 Mesh.process_frame - C
-    C 8:0 Mesh - A
-    M 11:4 Mesh.__init__ - A
-    M 86:4 Mesh.deinit - A
-    M 90:4 Mesh.export_pcd - A
-    M 96:4 Mesh.export_stl - A
+    M 27:4 Mesh.process_frame - C
+    C 7:0 Mesh - B
+    M 12:4 Mesh.__init__ - A
+    M 105:4 Mesh.deinit - A
 source/outputs/images.py
-    C 9:0 G3DImagesOut - A
-    M 16:4 G3DImagesOut.process_frame - A
-    M 10:4 G3DImagesOut.__init__ - A
-    M 23:4 G3DImagesOut.deinit - A
+    C 9:0 Images - A
+    M 12:4 Images.__init__ - A
+    M 18:4 Images.process_frame - A
+    M 22:4 Images.deinit - A
 source/outputs/opencv_video.py
     C 9:0 CV2Video - A
     M 10:4 CV2Video.__init__ - A
-    M 18:4 CV2Video.process_frame - A
-    M 21:4 CV2Video.deinit - A
+    M 24:4 CV2Video.process_frame - A
+    M 28:4 CV2Video.deinit - A
 source/outputs/calibration/laser_calibration.py
-    M 24:4 LaserCalibration.process_frame - A
+    M 34:4 LaserCalibration.process_frame - A
     C 9:0 LaserCalibration - A
-    M 55:4 LaserCalibration.deinit - A
-    M 10:4 LaserCalibration.__init__ - A
-    M 13:4 LaserCalibration._fit_plane - A
+    M 81:4 LaserCalibration.deinit - A
+    M 12:4 LaserCalibration.__init__ - A
+    M 21:4 LaserCalibration._fit_plane - A
+    M 131:4 LaserCalibration.export_report - A
 source/outputs/calibration/camera_calibration.py
-    M 13:4 CameraCalibration.process_frame - A
+    M 21:4 CameraCalibration.process_frame - A
     C 9:0 CameraCalibration - A
-    M 29:4 CameraCalibration.deinit - A
-    M 10:4 CameraCalibration.__init__ - A
+    M 43:4 CameraCalibration.deinit - A
+    M 12:4 CameraCalibration.__init__ - A
+    M 73:4 CameraCalibration.export_report - A
 source/outputs/calibration/exposure_calibration.py
     C 8:0 ExposureCalibration - A
-    M 9:4 ExposureCalibration.__init__ - A
-    M 12:4 ExposureCalibration.load - A
-    M 15:4 ExposureCalibration.process_frame - A
-    M 18:4 ExposureCalibration.calibrate - A
+    M 14:4 ExposureCalibration.__init__ - A
+    M 17:4 ExposureCalibration.load - A
+    M 20:4 ExposureCalibration.process_frame - A
+    M 23:4 ExposureCalibration.calibrate - A
 source/outputs/calibration/base.py
-    M 106:4 Base._determine_pixel_color - B
-    M 85:4 Base.generate_checker_plane - B
-    M 157:4 Base._segment_laser_intensity - B
-    C 28:0 Base - A
-    M 57:4 Base.get_laser_points - A
-    M 98:4 Base.segment_laser - A
-    M 130:4 Base._segment_laser_midle - A
-    C 11:0 _PickleableBase - A
-    M 29:4 Base.__init__ - A
-    M 50:4 Base.deinit - A
-    M 12:4 _PickleableBase.__init__ - A
-    M 21:4 _PickleableBase.load - A
-    M 24:4 _PickleableBase.save - A
-    M 54:4 Base.load - A
-    M 74:4 Base._generate_charuco_plane - A
-    M 81:4 Base.generate_charuco_plane - A
+    M 195:4 Base._segment_laser_intensity - B
+    M 141:4 Base._determine_pixel_color - B
+    M 113:4 Base.generate_checker_plane - B
+    M 275:4 Base._filter_points - A
+    C 36:0 Base - A
+    M 75:4 Base.get_laser_points - A
+    M 128:4 Base.segment_laser - A
+    M 167:4 Base._segment_laser_midle - A
+    M 257:4 Base.export_pcd - A
+    C 12:0 _PickleableBase - A
+    M 60:4 Base.deinit - A
+    M 15:4 _PickleableBase.__init__ - A
+    M 29:4 _PickleableBase.load - A
+    M 32:4 _PickleableBase.save - A
+    M 37:4 Base.__init__ - A
+    M 66:4 Base.load - A
+    M 69:4 Base.export_report - A
+    M 72:4 Base.process_frame - A
+    M 100:4 Base._generate_charuco_plane - A
+    M 107:4 Base.generate_charuco_plane - A
+    M 296:4 Base.export_stl - A
+    M 315:4 Base._draw_test_image - A
 source/core/process_loop.py
-    M 28:4 ProcessLoop.run - A
+    M 33:4 ProcessLoop.run - A
     C 6:0 ProcessLoop - A
-    M 7:4 ProcessLoop.__init__ - A
-    M 23:4 ProcessLoop.deinit - A
-    M 19:4 ProcessLoop.sigint_handler - A
+    M 9:4 ProcessLoop.__init__ - A
+    M 27:4 ProcessLoop.deinit - A
+    M 23:4 ProcessLoop.sigint_handler - A
 source/core/builder.py
-    M 20:4 G3DBuilder.build_outputs - B
-    C 13:0 G3DBuilder - A
-    M 50:4 G3DBuilder.build_input - A
-    M 14:4 G3DBuilder.__init__ - A
-    M 17:4 G3DBuilder.build_loop - A
-source/core/g3d_input.py
-    C 7:0 G3DInput - A
-    M 8:4 G3DInput.__init__ - A
-    M 20:4 G3DInput.deinit - A
-    M 17:4 G3DInput.read - A
-    M 25:4 G3DInput.is_open - A
+    M 24:4 G3DBuilder.build_outputs - C
+    C 14:0 G3DBuilder - B
+    M 67:4 G3DBuilder.build_input - A
+    M 17:4 G3DBuilder.__init__ - A
+    M 20:4 G3DBuilder.build_loop - A
+source/core/g3d_io.py
+    M 94:4 G3DAsyncInput.read - A
+    M 108:4 G3DAsyncInput.loop - A
+    C 84:0 G3DAsyncInput - A
+    C 121:0 G3DAsyncOutput - A
+    M 141:4 G3DAsyncOutput.loop - A
+    C 11:0 G3DIOInterface - A
+    C 20:0 G3DInput - A
+    M 22:4 G3DInput.__init__ - A
+    M 31:4 G3DInput.deinit - A
+    C 44:0 G3DOutput - A
+    C 50:0 G3DAsyncIO - A
+    M 132:4 G3DAsyncOutput.process_frame - A
+    M 13:4 G3DIOInterface.__init__ - A
+    M 16:4 G3DIOInterface.deinit - A
+    M 36:4 G3DInput.read - A
+    M 39:4 G3DInput.is_open - A
+    M 46:4 G3DOutput.process_frame - A
+    M 58:4 G3DAsyncIO.__init__ - A
+    M 70:4 G3DAsyncIO.deinit - A
+    M 80:4 G3DAsyncIO.loop - A
+    M 87:4 G3DAsyncInput.__init__ - A
+    M 91:4 G3DAsyncInput.is_open - A
+    M 123:4 G3DAsyncOutput.__init__ - A
+    M 129:4 G3DAsyncOutput.deinit - A
 source/core/pickleable.py
-    C 4:0 Pickleable - A
-    M 5:4 Pickleable.load - A
-    M 11:4 Pickleable.save - A
+    C 6:0 Pickleable - A
+    M 12:4 Pickleable.load - A
+    M 21:4 Pickleable.save - A
 source/core/config_types.py
     C 7:0 InputMode - A
     C 13:0 OutputMode - A
     C 22:0 CalibMode - A
     C 30:0 SegmentationMode - A
-    C 37:0 BoardDescriptor - A
-    C 47:0 Config - A
-source/core/g3d_output.py
-    C 6:0 G3DOutput - A
-    M 7:4 G3DOutput.__init__ - A
-    M 10:4 G3DOutput.deinit - A
-    M 13:4 G3DOutput.process_frame - A
+    C 36:0 FilterMode - A
+    C 43:0 BoardDescriptor - A
+    C 53:0 Config - A
 source/core/config_constants.py
-    C 6:0 G3DConstants - A
-source/core/g3d_async_output.py
-    C 10:0 G3DAsyncOutput - A
-    M 30:4 G3DAsyncOutput.process_frame - A
-    M 37:4 G3DAsyncOutput.loop - A
-    M 11:4 G3DAsyncOutput.__init__ - A
-    M 22:4 G3DAsyncOutput.deinit - A
+    C 4:0 G3DConstants - A

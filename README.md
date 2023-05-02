@@ -167,16 +167,16 @@ Source:
 
 
 ```python
-!radon raw source > ./docs/raw.txt
-!radon cc source > ./docs/cc.txt
-!radon mi source > ./docs/mi.txt
+!radon raw source > ./docs/analysis/raw.txt
+!radon cc source > ./docs/analysis/cc.txt
+!radon mi source > ./docs/analysis/mi.txt
 ```
 
 
 ```python
-# import cProfile
-# cProfile.run('foo()')
-#TODO: do the actual profiling
+#!python -m cProfile ./source/main.py > ./docs/analysis/cProfile.txt
+#!python -m cProfile -o ./docs/analysis/cProfile.prof ./source/main.py
+#!python -m snakeviz ./docs/analysis/cProfile.prof
 ```
 
 ## Architecture
