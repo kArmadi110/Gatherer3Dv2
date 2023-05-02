@@ -3,19 +3,19 @@ import cv2
 
 from core.config_types import Config
 
-from core.g3d_input import G3DInput
-
-# TODO: test with legacy camera
+from core.g3d_io import G3DInput
 
 
 class CV2Camera(G3DInput):
+    """Reads frames from a cv2 camera input."""
+
     def __init__(self, cfg: Config):
         G3DInput.__init__(self, cfg)
 
         self._counter = 0
         self._stream_state = True
 
-        # GSTREAM
+        # experimental GSTREAM pipeline
         # self._cap = cv2.VideoCapture(f" libcamerasrc ! video/x-raw, width=(int){self._cfg.resolution[0]}, height=(int){self._cfg.resolution[1]}" "," +
         #                             f" framerate=(fraction){self._cfg.input_fps}/1 !" +
         #                             " videoconvert ! videoscale !" +

@@ -3,10 +3,12 @@ import cv2
 
 from core.config_types import Config
 
-from core.g3d_input import G3DInput
+from core.g3d_io import G3DInput
 
 
 class Video(G3DInput):
+    """Reads frames from a video input."""
+
     def __init__(self, cfg: Config):
         G3DInput.__init__(self, cfg)
 

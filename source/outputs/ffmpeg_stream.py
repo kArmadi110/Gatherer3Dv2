@@ -5,10 +5,15 @@ import cv2
 
 from core.config_types import Config
 
-from core.g3d_output import G3DOutput
+from core.g3d_io import G3DOutput
 
 
 class FFMPEGStream(G3DOutput):
+    """
+    FFMPEG output rtsp stream.
+    Before runing this starting rtsp-simple-server is suggested
+    """
+
     def __init__(self, cfg: Config):
         G3DOutput.__init__(self, cfg)
 

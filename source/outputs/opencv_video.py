@@ -3,15 +3,17 @@ import cv2
 
 from core.config_types import Config
 
-from core.g3d_output import G3DOutput
-
-# TODO: Possible memory leak with h264, it becomes slower and slower and consumes more and more memory
+from core.g3d_io import G3DOutput
 
 
 class CV2Video(G3DOutput):
     def __init__(self, cfg: Config):
+        """
+        Writes frames to video file with cv2.VideoWriter.
+        """
         G3DOutput.__init__(self, cfg)
 
+        # Possible memory leak with h264, it becomes slower and slower and consumes more and more memory?
         self._output_video = cv2.VideoWriter(self._cfg.output_folder+self._cfg.output_name+'.mp4',  # mp4, mkv
                                              cv2.VideoWriter_fourcc(*'mp4v'),  # avc1, mp4v, x264, mjpg, XVID, H264
                                              self._cfg.input_fps,

@@ -7,6 +7,8 @@ from outputs.calibration.base import Base
 
 
 class CameraCalibration(Base):
+    """calibrates the camera using charuco board."""
+
     def __init__(self, cfg: Config):
         Base.__init__(self, cfg)
         self._std_dev_intr = 0
@@ -17,24 +19,32 @@ class CameraCalibration(Base):
         self._frame_num = 0
 
     def process_frame(self, frame: np.array):
+        """
+        Gather charuco corners from the frames.
+        """
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        corners, ids, _ = cv2.aruco.detectMarkers(gray, self._aruco_dict)
+
+        para = cv2.aruco.DetectorParameters_create()
+        para.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_SUBPIX
+        corners, ids, _ = cv2.aruco.detectMarkers(gray, self._aruco_dict, parameters=para)
         self._frame_num += 1
 
         if len(corners) > self._cfg.pos_confidence_th*len(self._charuco_board.chessboardCorners):
-            for corner in corners:
-                cv2.cornerSubPix(gray, corner,
-                                 winSize=(3, 3),
-                                 zeroZone=(-1, -1),
-                                 criteria=(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.00001))
-            res2 = cv2.aruco.interpolateCornersCharuco(corners, ids, gray, self._charuco_board)
+            ret, char_corners, char_ids = cv2.aruco.interpolateCornersCharuco(corners, ids, gray, self._charuco_board)
 
-            if res2[1] is not None and res2[2] is not None:
-                self._all_corners.append(res2[1])
-                self._all_ids.append(res2[2])
+            if ret and char_corners is not None and char_ids is not None:
+                self._all_corners.append(char_corners)
+                self._all_ids.append(char_ids)
+
+                print(f"FOUND{self._success} ")
                 self._success += 1
+                cv2.imwrite(f"{self._cfg.output_folder}/{self._cfg.output_name}_{self._success}.png", frame)
 
     def deinit(self):
+        """
+        Calibrate camera using the detected charuco corners
+        """
+
         dist_coeffs_init = np.zeros((5, 1))
 
         camera_mtx_init = np.array([[1000.,       0., self._cfg.resolution[0]/2.],
@@ -61,6 +71,8 @@ class CameraCalibration(Base):
         Base.deinit(self)
 
     def export_report(self):
+        """Export calibration report."""
+
         with open(f"{self._cfg.output_folder}camera{self._cfg.output_name}.txt", "a", encoding="utf8") as outfile:
             outfile.write("--------------------------------------------------\n")
             outfile.write(f"Camera Calibration on {self._cfg.input_folder + self._cfg.input_name}\n")

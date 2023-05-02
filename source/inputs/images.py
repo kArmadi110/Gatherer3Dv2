@@ -6,13 +6,18 @@ import cv2
 
 from core.config_types import Config
 
-from core.g3d_input import G3DInput
+from core.g3d_io import G3DInput
 
 
 class Images(G3DInput):
+    """Reads images from a folder."""
+
     def __init__(self, cfg: Config):
         G3DInput.__init__(self, cfg)
 
+        # Generate the frame list in adwance.
+        # This is quite useful when we export a bunch of images for calibration
+        # but wee only want to use the best of the best.
         self._frame_list = [join(self._cfg.input_folder, f) for f in listdir(self._cfg.input_folder)
                             if self._cfg.input_name in f and
                             isfile(join(self._cfg.input_folder, f))]

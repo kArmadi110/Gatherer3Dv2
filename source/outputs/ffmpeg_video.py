@@ -5,13 +5,16 @@ import numpy as np
 
 from core.config_types import Config
 
-from core.g3d_output import G3DOutput
-
-# TODO: ffmpeg buffer error with 1640x1232
+from core.g3d_io import G3DOutput
 
 
 class FFMPEGVideo(G3DOutput):
     def __init__(self, cfg: Config):
+        """
+        Writes frames to a video file on a separate process.
+        FFMPEG buffer error with 1640x1232.
+        Quality is also quite low.
+        """
         G3DOutput.__init__(self, cfg)
 
         self._ffmpeg_output = subprocess.Popen(['ffmpeg',
@@ -24,7 +27,8 @@ class FFMPEGVideo(G3DOutput):
                                                 '-r', f"{self._cfg.input_fps}",
                                                 '-i', '-',
                                                 # '-b:v', '30k',
-                                                '-c:v', 'mpeg4_v4l2m2m',
+                                                # h264_v4l2m2m hw acceleration. Other: h263_v4l2m2m mpeg4_v4l2m2m vp8_v4l2m2m
+                                                '-c:v', 'h264_v4l2m2m',
                                                 # '-c:v', 'h264_omx', # not working on 64 bit os
                                                 # '-flush_packets', '1',
                                                 f'{self._cfg.output_folder + self._cfg.output_name}.mp4'],
