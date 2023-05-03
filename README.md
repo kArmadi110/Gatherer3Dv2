@@ -1,237 +1,114 @@
+# Introduction
+Raspberry Pi based 3D laser scanner.
+
+## Example result:
+Further results: ./docs/pcd_clean and ./docs/pcd_original and ./docs/results
+
+![bunny](./docs/results/bunny.gif)
+
+## MARK III device:
+![bunny](./docs/frame_models/print.png)
+
 # Installation
-## Introduction
-TODO: general stuff from the project
-jupyter nbconvert --execute --to markdown README.ipynb
 
 ## Required models
 
+Files to 3D print:
+ - ./docs/frame_models/MARKIII-CORE.stl
+ - ./docs/frame_models/MARKIII-LID.stl
+ - ./docs/frame_models/MARKIII-TOP.stl
 
-```python
-#TODO: show required frame
-```
+Default charuco board to print:
+ - ./docs/calibration-board.png
+
+With the proper configuration other board can be used.
 
 ## Required hardware
-TODO: 
+ - 1* Rasbperry Pi 4B 8GB (others should work but this is the one I have used)
+ - 1* Raspberry Camera Module 2 with CSI cable
+ - 1* 5V DC fan
+ - 1* 5mW laser line projector
+ - 4* M2.5 20mm screw with bolt
+ - 4* M3 16mm screw with bolt 
+ - Battery HAT (optional only for convinience, the device can be used with the standard power supply as well)
 
-## Required packages
+## Assembly
+***Warning: be careful with the solder***
 
+Place the CORE nuts and TOP nuts on top of the proper holes and apply heat to it. A solderer should do the trick. Too much heat could sink the nut too deep so be careful. (check out the [bottom right corner](#mark-iii-device) )
 
-```python
-#TODO: python required packages + streaming + used tools
-```
+Push the laser through the tilted hole. If it's still wobly make use a bit of tape :)
+Attach the raspberry to the printed CORE with the screws.
+Attach the battery HAT if you have one.
+Connect the laser and camera to the device. Default laser pin is GPIO14 but this can be changed in the configs.
+Put your camera in place as well and roll up the remaining cable. Push down the LID behind the camera.
+Push the TOP into place and connect the fan before screwing it on top of the TOP part.
+For further help check out the provided images from the [Introduction](#introduction).
+
+## Required software
+
+### OS and other base softwares
+ - Raspberry Pi OS (64-bit) (Bullseye)
+ - OpenCV with contrib (aruco and GStream) >= 4.5
+### Required python packages:
+ - numpy
+ - open3d
+ - opencv
+ - autopep8
+ - ffmpeg
+ - picamera2
+ - RPI.GPIO
+### Other required software
+ - rtsp-simple-server
+### Software for documentation
+ - radon
+ - cProfile
+ - snakeviz
+ - plantuml
+### VSCode plugins
+ - The list of recommended plugins can be found in .vscode/extensions.json
 
 ## Usage
-### Calibration board 
+### How to run
+´´´
+python main.py
+´´´
+With Ctrl+C you can terminate the program which whill save the output to the correct file.
 
+### Calbiration
+1. Put the charuco board on a flat surface.
+2. Calibrate the camera. To do this select a calbiration structure with proper settings and run the program.
+3. Calibrate the laser plane. Same as the previous point except instead of Camera calibration now select a Laser calibration structure.
+4. Set up your scan config structure according to the comments For further info see: ./source/core/config_constants.py and ./source/core/config_types.py.
+5. And scan your object.
 
-```python
-#TODO: generate two calibration boards
-#TODO: calibration with axes on image
+For further results and documentation check out ./docs/ and the code comments.
 
-    # def _exportExamples(self, mtx, dist, rvecs, tvecs):
-    #     self.selectedFrame = cv2.imread("./out/_distorted.png")
-    #     img_undist = cv2.undistort(self.selectedFrame, mtx, dist, None)
-
-    #     # print(rvecs)
-    #     # print(tvecs)
-    #     # return
-
-    #     cv2.imwrite("./out/_distorted.png", self.selectedFrame)
-    #     cv2.imwrite("./out/_undistorted.png", img_undist)
-
-    #     gray = cv2.cvtColor(self.selectedFrame, cv2.COLOR_BGR2GRAY)
-    #     # _aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
-    #     parameters = aruco.DetectorParameters_create()
-    #     corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, self._aruco_dict,
-    #                                                           parameters=parameters)
-
-    #     objPoints, imagepoints = aruco.getBoardObjectAndImagePoints(
-    #         self._charuco_board, corners, ids)
-
-    #     # SUB PIXEL DETECTION
-    #     criteria = (cv2.TERM_CRITERIA_EPS +
-    #                 cv2.TERM_CRITERIA_MAX_ITER, 100, 0.0001)
-    #     for corner in corners:
-    #         cv2.cornerSubPix(gray, corner, winSize=(
-    #             3, 3), zeroZone=(-1, -1), criteria=criteria)
-
-    #     print("1")
-    #     print(len(corners))
-    #     print("2")
-    #     print(corners)
-    #     print("3")
-    #     print(len(ids))
-    #     print("4")
-    #     print(objPoints)
-    #     print("5")
-    #     print(imagepoints)
-    #     # return
-
-    #     # px=1251.4963
-    #     # py=858.8839
-    #     px = 1278.6255
-    #     py = 866.16364
-    #     Z = 0
-    #     Lcam = mtx.dot(np.hstack((cv2.Rodrigues(rvecs[0])[0], tvecs[0])))
-    #     X = np.linalg.inv(np.hstack((Lcam[:, 0:2], np.array(
-    #         [[-1*px], [-1*py], [-1]])))).dot((-Z*Lcam[:, 2]-Lcam[:, 3]))
-    #     print(X)
-    #     return
-
-    #     # px=1251.4963
-    #     # py=858.8839
-    #     # px=1278.6255
-    #     # py=866.16364
-    #     # 1251.4963     858.8839           0.185      0.055      0.       0.18571468 0.05308852 0.35872269
-    #     # 1278.6255     866.16364          0.19500001 0.055      0.       0.19525311 0.05365029 0.35786451
-
-    #     frame_markers = aruco.drawDetectedMarkers(
-    #         self.selectedFrame.copy(), corners, ids)
-    #     cv2.imwrite("./out/frame_markers.png", frame_markers)
-
-    #     size_of_marker = 0.02  # side lenght of the marker in meter
-    #     length_of_axis = 0.1
-    #     rvecs, tvecs, _ = aruco.estimatePoseSingleMarkers(
-    #         corners, size_of_marker, mtx, dist)
-    #     # print(rvecs, tvecs)
-
-    #     imaxis = aruco.drawDetectedMarkers(
-    #         self.selectedFrame.copy(), corners, ids)
-
-    #     for i in range(len(tvecs)):
-    #         imaxis = aruco.drawAxis(
-    #             imaxis, mtx, dist, rvecs[i], tvecs[i], length_of_axis)
-
-    #     cv2.imwrite("./out/markers.png", imaxis)
-
-    # def testWithAxes(self, mtx, dist, rvecs, tvecs):
-    #     img_undist = cv2.undistort(self.selectedFrame, mtx, dist, None)
-
-    #     cv2.imwrite("./02_out/_distorted.png", self.selectedFrame)
-    #     cv2.imwrite("./02_out/_undistorted.png", img_undist)
-
-    #     cv2.imwrite("./02_out/_distortedLaser.png", self.segmentLaser(self.selectedFrame))
-    #     cv2.imwrite("./02_out/_undistortedLaser.png", self.segmentLaser(img_undist))
-
-    #     gray = cv2.cvtColor(self.selectedFrame, cv2.COLOR_BGR2GRAY)
-    #     # aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
-    #     parameters = aruco.DetectorParameters_create()
-    #     corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, self._aruco_dict,
-    #                                                           parameters=parameters)
-    #     print(len(corners))
-    #     print(len(ids))
-    #     # SUB PIXEL DETECTION
-    #     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.0001)
-    #     for corner in corners:
-    #         cv2.cornerSubPix(gray, corner, winSize=(3, 3), zeroZone=(-1, -1), criteria=criteria)
-
-    #     frame_markers = aruco.drawDetectedMarkers(self.selectedFrame.copy(), corners, ids)
-    #     cv2.imwrite("./02_out/frame_markers.png", frame_markers)
-
-    #     size_of_marker = 0.02  # side lenght of the marker in meter
-    #     length_of_axis = 0.1
-    #     rvecs, tvecs, _ = aruco.estimatePoseSingleMarkers(corners, size_of_marker, mtx, dist)
-    #     print(rvecs, tvecs)
-
-    #     imaxis = aruco.drawDetectedMarkers(self.selectedFrame.copy(), corners, ids)
-
-    #     for i in range(len(tvecs)):
-    #         imaxis = aruco.drawAxis(imaxis, mtx, dist, rvecs[i], tvecs[i], length_of_axis)
-
-    #     cv2.imwrite("./02_out/markers.png", imaxis)
-
-```
-
-## Configs
-TODO: describe the configs with examples
-
-
-```python
-#TODO: describe the configs with examples
-```
-
-## Example run on a test video sequence
-
-
-```python
-#TODO: Example run on a test video sequence
-```
-
-# Code analysis
+# Code analysis and Architecture
 
 ## Metrics
 Source:
-
  - https://pypi.org/project/radon/
  - https://radon.readthedocs.io/en/latest/commandline.html
 
-
-```python
-!radon raw source > ./docs/analysis/raw.txt
-!radon cc source > ./docs/analysis/cc.txt
-!radon mi source > ./docs/analysis/mi.txt
-```
-
-
-```python
-#!python -m cProfile ./source/main.py > ./docs/analysis/cProfile.txt
-#!python -m cProfile -o ./docs/analysis/cProfile.prof ./source/main.py
-#!python -m snakeviz ./docs/analysis/cProfile.prof
-```
+´´´
+radon raw source -s > ./docs/raw.txt
+radon cc source > ./docs/cc.txt
+radon mi source > ./docs/mi.txt
+python -m cProfile ./source/main.py > ./docs/analysis/cProfile.txt
+python -m cProfile -o ./docs/analysis/cProfile.prof ./source/main.py
+python -m snakeviz ./docs/analysis/cProfile.prof
+´´´
+Results: ./docs/analysis
 
 ## Architecture
-TODO: add architecture
+Check out ./docs/architecture/
 
-# Figures
+![core module](./docs/architecture/exports/1-core.png)
+![inputs module](./docs/architecture/exports/2-inputs.png)
+![outputs module](./docs/architecture/exports/3-outputs.png)
+![activity diagram](./docs/architecture/exports/4-flowchart.png)
+![sequence diagram](./docs/architecture/exports/5-sequence.png)
 
-
-```python
-# TODO: sheered plane on test image
-# TODO: calibration plane and laser plane intersection
-# TODO: laser degree calculation and figure
-# TODO: demonstrational image with oriignal image + segmented line + 3d points gathered
-# TODO: module structure
-# TODO: cube example from mesh.py
-
-    # def testPointClouds(self):
-    #     points = []
-
-    #     for i in range(11):
-    #         for j in range(11):
-    #             points.append([i/10.0, j/10.0, 0])
-
-    #     for i in range(11):
-    #         for j in range(11):
-    #             points.append([i/10.0, j/10.0, 1])
-
-    #     for i in range(11):
-    #         for j in range(11):
-    #             points.append([i/10.0, 0, j/10.0])
-
-    #     for i in range(11):
-    #         for j in range(11):
-    #             points.append([0, i/10.0, j/10.0])
-
-    #     for i in range(11):
-    #         for j in range(11):
-    #             points.append([i/10.0, 1, j/10.0])
-
-    #     for i in range(11):
-    #         for j in range(11):
-    #             points.append([1, i/10.0, j/10.0])
-
-    #     self.exportToPCD("./out/test1.pcd", points)
-    #     self.exportToSTL("./out/test1.stl", points)
-
-```
-
-# Tests
-
-
-```python
-#TODO: Test in dark
-#TODO: Test in light
-#TODO: Test with horizontal line
-#TODO: Test with vertical line
-
-```
+# Sources and useful links
+TODO
