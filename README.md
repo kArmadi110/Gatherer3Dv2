@@ -33,9 +33,9 @@ With the proper configuration other board can be used.
  - Battery HAT (optional only for convinience, the device can be used with the standard power supply as well)
 
 ## Assembly
-***Warning: be careful with the solder***
+***Warning: be careful with the solder iron***
 
-Place the CORE nuts and TOP nuts on top of the proper holes and apply heat to it. A solderer should do the trick. Too much heat could sink the nut too deep so be careful. (check out the [bottom right corner](#mark-iii-device) )
+Place the CORE nuts and TOP nuts on top of the proper holes and apply heat to it. A solder iron should do the trick. Too much heat could sink the nut too deep so be careful. (check out the [bottom right corner](#mark-iii-device) )
 
 Push the laser through the tilted hole. If it's still wobly make use a bit of tape :)
 Attach the raspberry to the printed CORE with the screws.
@@ -70,9 +70,9 @@ For further help check out the provided images from the [Introduction](#introduc
 
 ## Usage
 ### How to run
-´´´
+```
 python main.py
-´´´
+```
 With Ctrl+C you can terminate the program which whill save the output to the correct file.
 
 ### Calbiration
@@ -91,14 +91,14 @@ Source:
  - https://pypi.org/project/radon/
  - https://radon.readthedocs.io/en/latest/commandline.html
 
-´´´
+```
 radon raw source -s > ./docs/raw.txt
 radon cc source > ./docs/cc.txt
 radon mi source > ./docs/mi.txt
 python -m cProfile ./source/main.py > ./docs/analysis/cProfile.txt
 python -m cProfile -o ./docs/analysis/cProfile.prof ./source/main.py
 python -m snakeviz ./docs/analysis/cProfile.prof
-´´´
+```
 Results: ./docs/analysis
 
 ## Architecture
