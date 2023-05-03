@@ -1,0 +1,86 @@
+@startuml outputs
+namespace outputs {
+    namespace calibration {
+        namespace base {}
+        namespace camera_calibration {}
+        namespace exposure_calibration {}
+        namespace laser_calibration {}
+    }
+    namespace ffmpeg_stream {}
+    namespace ffmpeg_video {}
+    namespace images {}
+    namespace mesh {}
+    namespace opencv_gstream {}
+    namespace opencv_video {}
+}
+class outputs.calibration.base.Base {
+    _members: None
+    _aruco_dict: None
+    _charuco_board: None
+    _all_corners: None
+    _all_ids: None
+    _rotation_vectors: None
+    _translation_vectors: None
+    _laser_points: None
+    _colors: None
+    _success: None
+    _frame_num: None
+}
+class outputs.calibration.base._PickleableBase {
+    _name: None
+    _cfg: Config
+    _pickle_path: None
+    camera_matrix: None
+    distortion_coefficients: None
+    plane: None
+}
+class outputs.calibration.camera_calibration.CameraCalibration {
+    _std_dev_intr: None
+    _std_dev_extr: None
+    _per_view_errors: None
+    _success: None
+    _frame_num: None
+}
+class outputs.calibration.exposure_calibration.ExposureCalibration {
+}
+class outputs.calibration.laser_calibration.LaserCalibration {
+    _residuals: None
+    _rank: None
+    _rotation_vectors: None
+    _translation_vectors: None
+}
+class outputs.ffmpeg_stream.FFMPEGStream {
+    _stream: None
+}
+class outputs.ffmpeg_video.FFMPEGVideo {
+    _ffmpeg_output: None
+    _counter: None
+}
+class outputs.images.Images {
+    _counter: None
+    _output_path: None
+}
+class outputs.mesh.Mesh {
+    _points_2d: None
+    _points_3d: None
+    rotation_vectors: None
+    translation_vectors: None
+    _max_sizes: None
+}
+class outputs.opencv_gstream.CV2Gstream {
+    _stream: None
+}
+class outputs.opencv_video.CV2Video {
+    _output_video: None
+    _counter: None
+}
+
+outputs.opencv_video.CV2Video -[hidden]- outputs.opencv_gstream.CV2Gstream
+outputs.ffmpeg_stream.FFMPEGStream -[hidden]- outputs.ffmpeg_video.FFMPEGVideo
+
+outputs.calibration.base.Base <|-- outputs.calibration.camera_calibration.CameraCalibration
+outputs.calibration.base.Base <|-- outputs.calibration.exposure_calibration.ExposureCalibration
+outputs.calibration.base.Base <|-- outputs.calibration.laser_calibration.LaserCalibration
+outputs.calibration.base.Base <|-- outputs.mesh.Mesh
+footer Gatherer3D
+@enduml

@@ -1,0 +1,34 @@
+@startuml Gatherer3D Sequence Diagram
+
+title **Gatherer3D Sequence Diagram**
+
+main -> Gatherer3D  : build_loop
+Gatherer3D --> main  : Gatherer3D
+
+main -> Gatherer3D ++ : run
+
+create InputThread 
+Gatherer3D ->> InputThread ++ : init
+
+create OutputThread
+Gatherer3D ->> OutputThread ++ : init
+
+loop until signal received
+
+Gatherer3D -> InputThread : read
+InputThread --> Gatherer3D : frame
+Gatherer3D ->> OutputThread : process_frame
+
+end
+
+Gatherer3D -> InputThread : deinit
+InputThread --> Gatherer3D
+deactivate InputThread
+Gatherer3D -> OutputThread : deinit
+OutputThread --> Gatherer3D
+deactivate OutputThread
+
+Gatherer3D --> main
+deactivate Gatherer3D
+
+@enduml

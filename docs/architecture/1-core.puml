@@ -1,0 +1,124 @@
+@startuml core
+namespace core {
+    namespace g3d_io {}
+    namespace builder {}
+    namespace process_loop {}
+    namespace config_types {}
+    namespace config_constants {}
+    namespace pickleable {}
+}
+class core.g3d_io.G3DAsyncInput {
+}
+class core.g3d_io.G3DAsyncOutput {
+    throwaway: None
+    fps: None
+}
+class core.builder.G3DBuilder {
+    _cfg: Config
+}
+class core.g3d_io.G3DInput {
+}
+class core.process_loop.ProcessLoop {
+    _input_stream: G3DInput
+    _output_streams: G3DOutput
+    _thread_ctrl: None
+    _counter: None
+}
+enum core.config_types.CalibMode {
+    CAMERA: 0 {static}
+    LASER: 1 {static}
+    EXPOSURE: 2 {static}
+    IMPORT: 3 {static}
+}
+class core.config_types.Config {
+    is_async_mode: bool
+    async_q_limit: bool
+    input_mode: InputMode
+    output_mode: List[OutputMode]
+    calib_mode: CalibMode
+    input_folder: str
+    output_folder: str
+    output_name: str
+    input_name: str
+    resolution: Tuple[int, int]
+    input_fps: int
+    input_exposure: int
+    streamer_res: Tuple[int, int]
+    streaner_path: str
+    laser_gpio: int
+    color_mode: bool
+    segmentation_mode: SegmentationMode
+    pos_confidence_th: int
+    calib_board: BoardDescriptor
+    export_cage: bool
+    laser_calib_th: float
+    filter_mode: FilterMode
+    filter_param_1: int
+    filter_param_2: float
+}
+enum core.config_types.FilterMode {
+    NO_FILTER: 0 {static}
+    RADIUS: 1 {static}
+    STATISTICAL: 2 {static}
+}
+class core.config_constants.G3DConstants {
+}
+enum core.config_types.InputMode {
+    CAMERA: 0 {static}
+    IMAGES: 1 {static}
+    VIDEO: 2 {static}
+}
+enum core.config_types.OutputMode {
+    CALIB_BOARD: 0 {static}
+    CALIBRATION: 1 {static}
+    MESH: 2 {static}
+    STREAM: 3 {static}
+    VIDEO: 4 {static}
+    IMAGES: 5 {static}
+}
+enum core.config_types.SegmentationMode {
+    MIDLE: 0 {static}
+    INTENSITY: 1 {static}
+    SUBPIXEL: 2 {static}
+}
+class core.config_types.BoardDescriptor {
+    print_size_x: int
+    print_size_y: int
+    board_dim_x: int
+    board_dim_y: float
+    square_size: int
+    marker_size: int
+}
+class core.g3d_io.G3DAsyncIO {
+    _core: G3DIOInterface
+    _input_queue: None
+    _thread: None
+    _thread_ctrl: None
+}
+class core.g3d_io.G3DIOInterface {
+    _cfg: Config
+}
+class core.g3d_io.G3DOutput {
+}
+class core.pickleable.Pickleable {
+}
+core.g3d_io.G3DInput <|-- core.g3d_io.G3DAsyncInput
+core.g3d_io.G3DAsyncIO <|-- core.g3d_io.G3DAsyncInput
+core.g3d_io.G3DOutput <|-- core.g3d_io.G3DAsyncOutput
+core.g3d_io.G3DAsyncIO <|-- core.g3d_io.G3DAsyncOutput
+core.builder.G3DBuilder *-down- core.config_types.Config
+core.g3d_io.G3DIOInterface <|-- core.g3d_io.G3DInput
+core.process_loop.ProcessLoop *-up- core.g3d_io.G3DInput
+core.process_loop.ProcessLoop *-- core.g3d_io.G3DOutput
+core.config_types.Config *-- core.config_types.InputMode
+core.config_types.Config *-- core.config_types.OutputMode
+core.config_types.Config *-left- core.config_types.CalibMode
+core.config_types.Config *-right- core.config_types.SegmentationMode
+core.config_types.Config *-- core.config_types.BoardDescriptor
+core.config_types.Config *-- core.config_types.FilterMode
+core.g3d_io.G3DAsyncIO *-- core.g3d_io.G3DIOInterface
+core.g3d_io.G3DIOInterface <|-- core.g3d_io.G3DAsyncIO
+core.g3d_io.G3DIOInterface *-- core.config_types.Config
+core.g3d_io.G3DIOInterface <|-- core.g3d_io.G3DOutput
+footer Gatherer3D
+@enduml

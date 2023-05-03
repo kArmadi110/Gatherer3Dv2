@@ -1,0 +1,28 @@
+@startuml inputs
+namespace inputs {
+    namespace images {}
+    namespace opencv_camera {}
+    namespace pc2_camera {}
+    namespace video {}
+}
+class inputs.images.Images {
+    _frame_list: None
+    _frame_id: None
+    _stream_state: None
+}
+class inputs.opencv_camera.CV2Camera {
+    _counter: None
+    _stream_state: None
+    _cap: None
+}
+class inputs.pc2_camera.PC2Camera {
+    _counter: None
+    _stream_state: None
+    _cap: None
+}
+class inputs.video.Video {
+    _cap: None
+    _stream_state: None
+}
+footer Gatherer3D
+@enduml

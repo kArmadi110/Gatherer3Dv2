@@ -1,0 +1,67 @@
+@startuml
+start
+
+:Set configuration;
+
+:Gatherer3D builder;
+note right
+    Based on the config.
+    Create input, outputs and "cage".
+end note
+note left
+    On handheld version should_read is true 
+    when the there's an input frame.
+    Red steps only apply to the printer version.
+    A signal from outside this activity can set
+    main.thread_control to false.
+end note
+
+:Init Input;
+note left
+    An input can be a video file, 
+    a camera, or image sequence.
+end note
+
+:Init Output N;
+note left
+    An output can be a video file, 
+    a camera, an image sequence or
+    3d point cloud.
+end note
+
+fork
+    while (thread_control and input_is_okay) is (true)
+        if (should_read) then (true)
+            :Read input to queue;
+            :should_read = false;
+        else (false)
+            :Sleep;
+        endif
+    endwhile (false)
+    :deinit;
+fork again
+    while (thread_control) is (true)
+        if (frame is available) then (true)
+            :Read from queue;
+            :Process frame;
+        else (false)
+            :Sleep;
+        endif
+    endwhile (false)
+    :deinit;
+fork again
+    while (main.thread_control and \ninput.thread_control and \noutput.thread_control) is (true)
+        :read from input;
+        :process frame;
+        #red:move printer head;
+        #red:set should_read to true;
+    endwhile (false)
+    :deinit;
+    :set input.thread_control to false;
+    :set output.thread_control to false;
+    :join input and output threads;
+    :export result;
+end fork
+
+stop
+@enduml
