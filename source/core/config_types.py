@@ -101,3 +101,6 @@ class Config():
     filter_mode: FilterMode = FilterMode.NO_FILTER
     filter_param_1: int = 0
     filter_param_2: float = 0
+
+    debug_mode: bool = False
+    debug_log: bool = True

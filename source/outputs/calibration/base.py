@@ -91,8 +91,8 @@ class Base(G3DOutput):
             masked = np.zeros(frame.shape, np.uint8)
             masked[min_y:max_y, min_x:max_x] = frame[min_y:max_y, min_x:max_x]
 
-            # DEBUG export masked frame
-            # cv2.imwrite(f"./bin/temp/{self._success}_masked.png", masked)
+            if self._cfg.debug_mode:
+                cv2.imwrite(f"./bin/temp/{self._success}_masked.png", masked)
             return self.segment_laser(masked)
         else:
             return self.segment_laser(frame)
@@ -210,8 +210,8 @@ class Base(G3DOutput):
         if len(nonzero[0]) > img.shape[0]*img.shape[1]*self._cfg.laser_calib_th:
             return result, colors
 
-        # DEBUG: write image
-        # cv2.imwrite(f"./bin/temp/{self._success}_threshold.png", thrs)
+        if self._cfg.debug_mode:
+            cv2.imwrite(f"./bin/temp/{self._success}_threshold.png", thrs)
 
         last_non_zero = 0
         max_val = 0
@@ -315,7 +315,9 @@ class Base(G3DOutput):
     def _draw_test_image(self, img_undist, rvec, tvec):
         """Draw test iamge with axis on charuco board"""
 
-        imaxis = cv2.drawFrameAxes(img_undist, self._members.camera_matrix,
+        newImage = img_undist.copy()
+
+        imaxis = cv2.drawFrameAxes(newImage, self._members.camera_matrix,
                                    self._members.distortion_coefficients,
                                    rvec, tvec, 0.1)
 

@@ -1,5 +1,6 @@
-@startuml
+@startuml Gatherer3D activity diagram
 start
+title **Gatherer3D activity diagram**
 
 :Set configuration;
 

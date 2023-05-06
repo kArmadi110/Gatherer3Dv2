@@ -51,8 +51,8 @@ class Mesh(Base):
             if not ret:
                 return
 
-            # DEBUG: draw image with axis
-            # self._draw_test_image(img_undist, rvec, tvec)
+            if self._cfg.debug_mode:
+                self._draw_test_image(img_undist, rvec, tvec)
 
             # save corners
             self._all_corners.append(corners)
@@ -69,7 +69,9 @@ class Mesh(Base):
             rot_trans = np.vstack((rot_trans, temp))
             rot_trans = np.linalg.inv(rot_trans)
 
-            print(f"FOUND{self._success} ")
+            if self._cfg.debug_log:
+                print(f"FOUND new imageId: {self._success} ")
+
             self._success += 1
 
             # calculate laser plane intersection with camera to pixel line

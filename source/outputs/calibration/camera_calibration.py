@@ -36,7 +36,9 @@ class CameraCalibration(Base):
                 self._all_corners.append(char_corners)
                 self._all_ids.append(char_ids)
 
-                print(f"FOUND{self._success} ")
+                if self._cfg.debug_log:
+                    print(f"FOUND new imageId: {self._success} ")
+
                 self._success += 1
                 cv2.imwrite(f"{self._cfg.output_folder}/{self._cfg.output_name}_{self._success}.png", frame)
 

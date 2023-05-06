@@ -72,10 +72,12 @@ class LaserCalibration(Base):
                 self._translation_vectors.append(tvec)
                 self._laser_points.append(temp)
 
-                print(f"FOUND{self._success} ")
+                if self._cfg.debug_log:
+                    print(f"FOUND new imageId: {self._success} ")
 
-                # DEBUG: write image
-                # cv2.imwrite(f"./bin/temp/{self._success}_original.png", img_undist)
+                if self._cfg.debug_mode:
+                    cv2.imwrite(f"./bin/temp/{self._success}_original.png", img_undist)
+
                 self._success += 1
 
     def deinit(self):

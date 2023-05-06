@@ -111,4 +111,13 @@ Check out ./docs/architecture/
 ![sequence diagram](./docs/architecture/exports/5-sequence.png)
 
 # Sources and useful links
-TODO
+ - https://picamera.readthedocs.io/en/release-1.13/
+ - https://www.researchgate.net/publication/2401027_A_Comparison_of_Algorithms_for_Subpixel_Peak_Detection
+ - https://sites.ecse.rpi.edu/~rjradke/cvfxcourse.html
+ - http://mesh.brown.edu/desktop3dscan/ch4-slit.html
+ - https://docs.opencv.org/4.x/da/d13/tutorial_aruco_calibration.html
+ - https://docs.opencv.org/4.x/d5/dae/tutorial_aruco_detection.html
+ - https://docs.opencv.org/3.4/d9/d0c/group__calib3d.html
+ - https://www.thingiverse.com/thing:3731
+ - https://www.thingiverse.com/thing:763622
+ - https://www.thingiverse.com/thing:4066731

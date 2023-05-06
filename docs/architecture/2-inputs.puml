@@ -1,4 +1,7 @@
-@startuml inputs
+@startuml Gatherer3D inputs module
+
+title **Gatherer3D inputs module**
+
 namespace inputs {
     namespace images {}
     namespace opencv_camera {}

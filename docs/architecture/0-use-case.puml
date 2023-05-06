@@ -1,0 +1,16 @@
+@startuml Use Case Diagram
+
+title **Use Case Diagram**
+
+skinparam packageStyle rectangle
+actor user
+left to right direction
+
+rectangle Gatherer3D {
+    user -- (calibration)
+    user -- (scan object)
+    user -- (change behaviour with configuration)
+    user -- (save/load local calibration data)
+    user -- (draw test images and debug log)
+}
+@enduml

@@ -1,4 +1,7 @@
-@startuml outputs
+@startuml Gatherer3D outputs module
+
+title **Gatherer3D outputs module**
+
 namespace outputs {
     namespace calibration {
         namespace base {}

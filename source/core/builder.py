@@ -42,7 +42,8 @@ class G3DBuilder():
             temp = g3d_out.CameraCalibration(self._cfg)
             temp.generate_charuco_plane()
 
-            print("Calibration Data exported!")
+            if self._cfg.debug_log:
+                print("Calibration Data exported!")
             sys.exit(0)
 
         if g3d_cfg.OutputMode.CALIBRATION in self._cfg.output_mode:

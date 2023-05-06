@@ -1,4 +1,7 @@
-@startuml core
+@startuml Gatherer3D core module
+
+title **Gatherer3D core module**
+
 namespace core {
     namespace g3d_io {}
     namespace builder {}
@@ -55,6 +58,8 @@ class core.config_types.Config {
     filter_mode: FilterMode
     filter_param_1: int
     filter_param_2: float
+    debug_mode: bool
+    debug_log: bool
 }
 enum core.config_types.FilterMode {
     NO_FILTER: 0 {static}
@@ -103,11 +108,11 @@ class core.g3d_io.G3DOutput {
 class core.pickleable.Pickleable {
 }
 core.g3d_io.G3DInput <|-- core.g3d_io.G3DAsyncInput
-core.g3d_io.G3DAsyncIO <|-- core.g3d_io.G3DAsyncInput
-core.g3d_io.G3DOutput <|-- core.g3d_io.G3DAsyncOutput
+core.g3d_io.G3DAsyncIO <|-up- core.g3d_io.G3DAsyncInput
+core.g3d_io.G3DOutput <|-up- core.g3d_io.G3DAsyncOutput
 core.g3d_io.G3DAsyncIO <|-- core.g3d_io.G3DAsyncOutput
 core.builder.G3DBuilder *-down- core.config_types.Config
-core.g3d_io.G3DIOInterface <|-- core.g3d_io.G3DInput
+core.g3d_io.G3DIOInterface <|-right- core.g3d_io.G3DInput
 core.process_loop.ProcessLoop *-up- core.g3d_io.G3DInput
 core.process_loop.ProcessLoop *-- core.g3d_io.G3DOutput
 core.config_types.Config *-- core.config_types.InputMode
