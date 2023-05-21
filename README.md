@@ -4,7 +4,7 @@ Raspberry Pi based 3D laser scanner.
 ## Example result:
 Further results: ./docs/pcd_clean and ./docs/pcd_original and ./docs/results
 
-![bunny](./docs/results/bunny.gif)
+![bunny](./docs/results/bunny_small.gif)
 
 ## MARK III device:
 ![bunny](./docs/frame_models/print.png)
